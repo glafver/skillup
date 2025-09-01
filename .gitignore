@@ -1,0 +1,46 @@
+# =====================
+# Node / Vite / React
+# =====================
+/skillup.client/node_modules/
+/skillup.client/dist/
+/skillup.client/.vite/
+# Environment variables
+/skillup.client/.env
+/skillup.client/.env.*.local
+
+# Logs
+/skillup.client/npm-debug.log*
+/skillup.client/yarn-debug.log*
+/skillup.client/yarn-error.log*
+/skillup.client/pnpm-debug.log*
+
+# TypeScript build info
+/skillup.client/*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Tailwind cache
+/skillup.client/.tailwindcache
+
+# =====================
+# .NET 8 backend
+# =====================
+/skillup.server/bin/
+/skillup.server/obj/
+/skillup.server/*.user
+/skillup.server/*.suo
+/skillup.server/*.csproj.user
+/skillup.server/.vs/
+
+# Swagger / OpenAPI auto-generated files
+/skillup.server/swagger.json
+/skillup.server/swagger.yaml
+
+# Optional: Rider / JetBrains
+*.sln.iml
