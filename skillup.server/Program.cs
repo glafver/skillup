@@ -13,6 +13,18 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+// MongoDB Configuration
+var mongoDBSettings = builder.Configuration
+                .GetSection("MongoDBSettings")
+                .Get<MongoDBSettings>();
+
+            builder.Services.Configure<MongoDBSettings>(
+                builder.Configuration.GetSection("MongoDBSettings"));
+
+            builder.Services.AddDbContext<SkillupDbContext>(options =>
+                options.UseMongoDB(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName));
+
+            builder.Services.AddScoped<IUserService, UserService>();
 
 // Swagger
 //builder.Services.AddEndpointsApiExplorer();
@@ -28,6 +40,18 @@ var app = builder.Build();
 //}
 
 //app.UseHttpsRedirection();
+
+// Test backend to DB
+using (var scope = app.Services.CreateScope())
+{
+    var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+    userService.CreateUser(new Models.User
+    {
+        Username = "nyanvändare",
+        Email = "nyanvändare@email.com",
+        Password = "password1233"
+    });
+}
 
 // Use CORS before Authorization
 app.UseCors("AllowAll");
