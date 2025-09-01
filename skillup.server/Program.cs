@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using skillup.server.Models;
+using skillup.server.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
