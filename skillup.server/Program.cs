@@ -51,6 +51,7 @@ namespace skillup.server
             //app.UseHttpsRedirection();
 
             // Test backend to DB
+            /*
             using (var scope = app.Services.CreateScope())
             {
                 var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
@@ -60,7 +61,7 @@ namespace skillup.server
                     Email = "test1@email.com",
                     Password = "password1233"
                 });
-            }
+            }*/
 
             // Use CORS before Authorization
             app.UseCors("AllowAll");
