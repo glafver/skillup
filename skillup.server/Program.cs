@@ -1,39 +1,76 @@
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddControllers();
-
-// Enable CORS
-builder.Services.AddCors(options =>
+using Microsoft.EntityFrameworkCore;
+using skillup.server.Models;
+using skillup.server.Services;
+namespace skillup.server
 {
-    options.AddPolicy("AllowAll", policy =>
+    public class Program
     {
-        policy.AllowAnyOrigin()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-});
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-// Swagger
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+            // Add services to the container.
+            builder.Services.AddControllers();
 
-var app = builder.Build();
+            // Enable CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+            // MongoDB Configuration
+            var mongoDBSettings = builder.Configuration
+                            .GetSection("MongoDBSettings")
+                            .Get<MongoDBSettings>();
 
-//Swagger in development
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//app.UseSwaggerUI();
-//}
+            builder.Services.Configure<MongoDBSettings>(
+                builder.Configuration.GetSection("MongoDBSettings"));
 
-//app.UseHttpsRedirection();
+            builder.Services.AddDbContext<SkillupDbContext>(options =>
+                options.UseMongoDB(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName));
 
-// Use CORS before Authorization
-app.UseCors("AllowAll");
+            builder.Services.AddScoped<IUserService, UserService>();
 
-app.UseAuthorization();
+            // Swagger
+            //builder.Services.AddEndpointsApiExplorer();
+            //builder.Services.AddSwaggerGen();
 
-app.MapControllers();
+            var app = builder.Build();
 
-app.Run();
+            //Swagger in development
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.UseSwagger();
+            //app.UseSwaggerUI();
+            //}
+
+            //app.UseHttpsRedirection();
+
+            // Test backend to DB
+            /*
+            using (var scope = app.Services.CreateScope())
+            {
+                var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+                userService.CreateUser(new Models.User
+                {
+                    Username = "test1",
+                    Email = "test1@email.com",
+                    Password = "password1233"
+                });
+            }*/
+
+            // Use CORS before Authorization
+            app.UseCors("AllowAll");
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}
