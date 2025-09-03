@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export function Navbar() {
+const Navbar: React.FC = () => {
     return (
         <nav className="bg-gray-200 px-6 mb-6">
             <div className="container mx-auto flex justify-between items-center">
@@ -9,7 +9,7 @@ export function Navbar() {
                         <img
                             src="/logo_name.png"
                             alt="SkillUp Logo"
-                            className="h-15 w-auto"
+                            className="h-20 w-auto"
                         />
                     </Link>
                 </div>
@@ -34,4 +34,6 @@ export function Navbar() {
             </div>
         </nav>
     );
-}
+};
+
+export default Navbar;
