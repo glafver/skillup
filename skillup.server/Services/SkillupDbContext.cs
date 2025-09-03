@@ -13,8 +13,17 @@ namespace skillup.server.Services
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>();
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(u => u.Id)
+                    .HasConversion(
+                        id => id.ToString(),// MongoDB ObjectId till string när det sparas
+                        value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
+                    );
+            });
         }
+
     }
 
 }

@@ -1,8 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using skillup.server.Models;
+
 namespace skillup.server.Services
 {
-    using skillup.server.Models;
-    using MongoDB.Driver;
-    using MongoDB.Bson;
     public class UserService : IUserService
     {
         private readonly SkillupDbContext _context;
@@ -12,38 +12,43 @@ namespace skillup.server.Services
             _context = context;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public async Task<List<User>> GetAllAsync()
         {
-            return _context.Users.ToList();
+            return await _context.Users.ToListAsync();
         }
 
-        public User GetUserById(ObjectId id)
+        public async Task<User?> GetByIdAsync(string id)
         {
-            return _context.Users.Find(id);
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Id.ToString() == id);
         }
-        public void CreateUser(User user)
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> CreateAsync(User user)
         {
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            return user;
         }
-        public void UpdateUser(ObjectId id, User user)
+
+        public async Task UpdateAsync(User user)
         {
-            var existingUser = _context.Users.Find(id);
-            if (existingUser != null)
-            {
-                existingUser.Username = user.Username;
-                existingUser.Email = user.Email;
-                existingUser.Password = user.Password;
-                _context.SaveChanges();
-            }
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
-        public void DeleteUser(ObjectId id)
+
+        public async Task DeleteAsync(string id)
         {
-            var user = _context.Users.Find(id);
+            var user = await GetByIdAsync(id);
             if (user != null)
             {
                 _context.Users.Remove(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
     }

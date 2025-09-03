@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using skillup.server.Models;
 using skillup.server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace skillup.server
 {
     public class Program
@@ -17,12 +21,12 @@ namespace skillup.server
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins("http://localhost:5173") // React app URL
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
             });
-            // MongoDB Configuration
+            // MongoDB Config
             var mongoDBSettings = builder.Configuration
                             .GetSection("MongoDBSettings")
                             .Get<MongoDBSettings>();
@@ -34,6 +38,31 @@ namespace skillup.server
                 options.UseMongoDB(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName));
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            //JWT
+            var key = builder.Configuration["Jwt:Key"];
+            var issuer = builder.Configuration["Jwt:Issuer"];
+            var audience = builder.Configuration["Jwt:Audience"];
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                };
+            });
 
             // Swagger
             //builder.Services.AddEndpointsApiExplorer();
@@ -50,7 +79,7 @@ namespace skillup.server
 
             //app.UseHttpsRedirection();
 
-            // Test backend to DB
+            // Testar till Mogno Atlas
             /*
             using (var scope = app.Services.CreateScope())
             {
