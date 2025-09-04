@@ -3,7 +3,7 @@ import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export const LoginForm = () => {
+export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,6 +30,9 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded">
+      {successMessage && (
+        <p className="text-green-500 mb-2">{successMessage}</p>
+      )}
       {error && <p className="text-red-500 mb-2">{error}</p>}
       {success && <p className="text-green-500 mb-2">Login successful!</p>}
 
@@ -54,7 +57,7 @@ export const LoginForm = () => {
 
       <button
         type="submit"
-        className="w-full bg-slate-700 text-gray-200 p-2 rounded"
+        className="w-full bg-cyan-700 text-gray-200 p-2 rounded"
       >
         Login
       </button>

@@ -6,16 +6,20 @@ import { authService } from "../services/authService";
 
 export default function AccountPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [successMessage, setSuccessMessage] = useState<string | undefined>(
+    undefined
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     if (authService.isLoggedIn()) {
       navigate("/");
     }
-  }, []);
+  }, [navigate]);
 
   const toggleForm = () => {
     setIsLogin((prev) => !prev);
+    setSuccessMessage(undefined); // reset message
   };
 
   return (
@@ -24,11 +28,20 @@ export default function AccountPage() {
         {isLogin ? "Login" : "Register"}
       </h2>
 
-      {isLogin ? <LoginForm /> : <RegisterForm />}
+      {isLogin ? (
+        <LoginForm successMessage={successMessage} />
+      ) : (
+        <RegisterForm
+          onRegisterSuccess={(message) => {
+            setSuccessMessage(message);
+            setIsLogin(true);
+          }}
+        />
+      )}
 
       <button
         onClick={toggleForm}
-        className="text-sm hover:text-teal-700 transition"
+        className="text-sm hover:text-teal-700 transition mt-4"
       >
         {isLogin
           ? "Don't have an account? Register"

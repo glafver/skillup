@@ -2,7 +2,10 @@ import { useState } from "react";
 import { authService } from "../services/authService";
 import type { RegisterRequest } from "../services/authService";
 
-export const RegisterForm = () => {
+interface RegisterFormProps {
+  onRegisterSuccess: (message: string) => void;
+}
+export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
@@ -19,6 +22,7 @@ export const RegisterForm = () => {
 
     try {
       await authService.register(data);
+      onRegisterSuccess("Registration successful! Please log in.");
       setSuccess(true);
       setFirstname("");
       setLastname("");
@@ -75,7 +79,7 @@ export const RegisterForm = () => {
 
       <button
         type="submit"
-        className="w-full bg-slate-700 text-gray-200 p-2 rounded"
+        className="w-full bg-cyan-700 text-gray-200 p-2 rounded"
       >
         Register
       </button>
