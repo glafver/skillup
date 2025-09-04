@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registerUser } from "../services/AuthService";
+import { registerUser } from "../services/authService";
 
 const RegisterForm: React.FC = () => {
   const [name, setName] = useState("");
