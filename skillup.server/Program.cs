@@ -28,8 +28,9 @@ namespace skillup.server
             });
             // MongoDB Config
             var mongoDBSettings = builder.Configuration
-                            .GetSection("MongoDBSettings")
-                            .Get<MongoDBSettings>();
+                .GetSection("MongoDBSettings")
+                .Get<MongoDBSettings>() 
+                ?? throw new InvalidOperationException("MongoDBSettings not found in configuration");
 
             builder.Services.Configure<MongoDBSettings>(
                 builder.Configuration.GetSection("MongoDBSettings"));
@@ -41,9 +42,12 @@ namespace skillup.server
             builder.Services.AddScoped<IAuthService, AuthService>();
 
             //JWT
-            var key = builder.Configuration["Jwt:Key"];
-            var issuer = builder.Configuration["Jwt:Issuer"];
-            var audience = builder.Configuration["Jwt:Audience"];
+            var key = builder.Configuration["Jwt:Key"]
+                    ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
+            var issuer = builder.Configuration["Jwt:Issuer"]
+                    ?? throw new InvalidOperationException("Jwt:Issuer is missing in configuration");
+            var audience = builder.Configuration["Jwt:Audience"]
+                    ?? throw new InvalidOperationException("Jwt:Audience is missing in configuration");
 
             builder.Services.AddAuthentication(options =>
             {
@@ -63,6 +67,7 @@ namespace skillup.server
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
                 };
             });
+
 
             // Swagger
             //builder.Services.AddEndpointsApiExplorer();

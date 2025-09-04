@@ -54,24 +54,41 @@ namespace skillup.server.Services
 
         private string GenerateJwtToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var keyString = _configuration["Jwt:Key"]
+        ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
+
+            var issuer = _configuration["Jwt:Issuer"]
+                ?? throw new InvalidOperationException("Jwt:Issuer is missing in configuration");
+
+            var audience = _configuration["Jwt:Audience"]
+                ?? throw new InvalidOperationException("Jwt:Audience is missing in configuration");
+
+            var durationString = _configuration["Jwt:DurationInMinutes"]
+                ?? throw new InvalidOperationException("Jwt:DurationInMinutes is missing in configuration");
+
+            if (!double.TryParse(durationString, out var durationMinutes))
+                throw new InvalidOperationException("Jwt:DurationInMinutes must be a number");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["Jwt:DurationInMinutes"])),
-                signingCredentials: creds);
+                expires: DateTime.UtcNow.AddMinutes(durationMinutes),
+                signingCredentials: creds
+            );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        
         }
     }
 }
