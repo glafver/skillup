@@ -1,18 +1,59 @@
-export interface RegisterData {
-  username: string;
+export interface LoginResponse {
+  token: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  firstname: string;
+  lastname: string;
   email: string;
   password: string;
 }
 
 const API_URL = "http://localhost:5178/api/auth";
 
-export const registerUser = async (data: RegisterData) => {
-  const res = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
+export const authService = {
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const res = await fetch(`${API_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
-  if (!res.ok) throw new Error("Registration failed");
-  return res.json();
+    if (!res.ok) {
+      throw new Error("Login failed");
+    }
+
+    const json = await res.json();
+    localStorage.setItem("token", json.token); // spara JWT
+    return json;
+  },
+
+  async register(data: RegisterRequest): Promise<void> {
+    const res = await fetch(`${API_URL}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      throw new Error("Register failed");
+    }
+  },
+
+  logout() {
+    localStorage.removeItem("token");
+  },
+
+  getToken(): string | null {
+    return localStorage.getItem("token");
+  },
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem("token");
+  },
 };

@@ -3,12 +3,13 @@ namespace skillup.server.Services
     using MongoDB.Bson;
     using skillup.server.Models;
 
-public interface IUserService
-{
-    IEnumerable<User> GetAllUsers();
-    User GetUserById(ObjectId id);
-    void CreateUser(User user);
-    void UpdateUser(ObjectId id, User user);
-    void DeleteUser(ObjectId id);
-}
+    public interface IUserService
+    {
+        Task<List<User>> GetAllAsync();
+        Task<User?> GetByIdAsync(string id);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User> CreateAsync(User user);
+        Task UpdateAsync(User user);
+        Task DeleteAsync(string id);
+    }
 }

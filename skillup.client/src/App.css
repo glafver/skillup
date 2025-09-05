@@ -1,3 +1,7 @@
 #root {
   /* if we need some extra css */
 }
+
+html, body, #root {
+  height: 100%;
+}

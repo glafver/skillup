@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using skillup.server.Models;
 using skillup.server.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace skillup.server
 {
     public class Program
@@ -17,15 +21,16 @@ namespace skillup.server
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins("http://localhost:5173") // React app URL
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
             });
-            // MongoDB Configuration
+            // MongoDB Config
             var mongoDBSettings = builder.Configuration
-                            .GetSection("MongoDBSettings")
-                            .Get<MongoDBSettings>();
+                .GetSection("MongoDBSettings")
+                .Get<MongoDBSettings>() 
+                ?? throw new InvalidOperationException("MongoDBSettings not found in configuration");
 
             builder.Services.Configure<MongoDBSettings>(
                 builder.Configuration.GetSection("MongoDBSettings"));
@@ -34,6 +39,35 @@ namespace skillup.server
                 options.UseMongoDB(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName));
 
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            //JWT
+            var key = builder.Configuration["Jwt:Key"]
+                    ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
+            var issuer = builder.Configuration["Jwt:Issuer"]
+                    ?? throw new InvalidOperationException("Jwt:Issuer is missing in configuration");
+            var audience = builder.Configuration["Jwt:Audience"]
+                    ?? throw new InvalidOperationException("Jwt:Audience is missing in configuration");
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                };
+            });
+
 
             // Swagger
             //builder.Services.AddEndpointsApiExplorer();
@@ -50,7 +84,7 @@ namespace skillup.server
 
             //app.UseHttpsRedirection();
 
-            // Test backend to DB
+            // Testar till Mogno Atlas
             /*
             using (var scope = app.Services.CreateScope())
             {

@@ -1,62 +1,40 @@
 import { useState } from "react";
 import { authService } from "../services/authService";
-import type { RegisterRequest } from "../services/authService";
+import type { LoginRequest } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
-interface RegisterFormProps {
-  onRegisterSuccess: (message: string) => void;
-}
-export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
+export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
 
-    const data: RegisterRequest = { firstname, lastname, email, password };
+    const data: LoginRequest = { email, password };
 
     try {
-      await authService.register(data);
-      onRegisterSuccess("Registration successful! Please log in.");
+      await authService.login(data);
       setSuccess(true);
-      setFirstname("");
-      setLastname("");
       setEmail("");
       setPassword("");
+      navigate("/");
     } catch (err: any) {
-      setError(err.message || "Registration failed");
+      setError(err.message || "Login failed");
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded">
-      {error && <p className="text-red-500 mb-2">{error}</p>}
-      {success && (
-        <p className="text-green-500 mb-2">Registration successful!</p>
+      {successMessage && (
+        <p className="text-green-500 mb-2">{successMessage}</p>
       )}
-
-      <input
-        type="text"
-        placeholder="First Name"
-        value={firstname}
-        onChange={(e) => setFirstname(e.target.value)}
-        required
-        className="w-full mb-2 p-2 border rounded"
-      />
-
-      <input
-        type="text"
-        placeholder="Last Name"
-        value={lastname}
-        onChange={(e) => setLastname(e.target.value)}
-        required
-        className="w-full mb-2 p-2 border rounded"
-      />
+      {error && <p className="text-red-500 mb-2">{error}</p>}
+      {success && <p className="text-green-500 mb-2">Login successful!</p>}
 
       <input
         type="email"
@@ -81,7 +59,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         type="submit"
         className="w-full bg-cyan-700 text-gray-200 p-2 rounded"
       >
-        Register
+        Login
       </button>
     </form>
   );
