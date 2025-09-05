@@ -2,9 +2,13 @@
 @import "tailwindcss";
 
 @theme {
-    --font-family: 'Roboto', sans-serif;
+    --font-roboto: 'Roboto', sans-serif;
 }
 
 body {
-    @apply text-slate-700;
+    @apply font-roboto text-slate-700;
 }
+
+/* body {
+    @apply text-slate-700;
+} */
