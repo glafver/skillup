@@ -15,9 +15,9 @@ const AboutSection: React.FC = () => {
 
                 <div className="md:col-span-1 text-center">
                     <img
-                        src="/logo.png"
+                        src="/logo-cyan.png"
                         alt="Learning illustration"
-                        className="w-20 mx-auto mb-8"
+                        className="w-15 mx-auto mb-8"
                     />
                     <h2 className="text-3xl md:text-4xl font-semibold mb-6">About  <span className="inline-block align-baseline font-bold">SKILLUP</span> </h2>
                     <p className="text-lg leading-relaxed mb-8">
@@ -25,7 +25,7 @@ const AboutSection: React.FC = () => {
                         Our mission is to make coding simple, engaging, and accessible for everyone.
                     </p>
                     <Link to="/about">
-                        <button className="bg-cyan-700 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-lg transition transform hover:scale-105 cursor-pointer">
+                        <button className="bg-cyan-700 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105 cursor-pointer">
                             Read More
                         </button>
                     </Link>

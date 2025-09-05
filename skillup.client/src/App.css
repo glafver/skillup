@@ -2,6 +2,12 @@
   /* if we need some extra css */
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
+}
+
+button {
+  cursor: pointer;
 }

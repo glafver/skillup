@@ -19,11 +19,11 @@ export default function AccountPage() {
 
   const toggleForm = () => {
     setIsLogin((prev) => !prev);
-    setSuccessMessage(undefined); // reset message
+    setSuccessMessage(undefined);
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
+    <div className="max-w-md mx-auto mt-10 p-6 border rounded-md shadow">
       <h2 className="text-2xl font-bold mb-4 font-family-Roboto text-slate-700 text-center">
         {isLogin ? "Login" : "Register"}
       </h2>
@@ -38,15 +38,19 @@ export default function AccountPage() {
           }}
         />
       )}
-
-      <button
-        onClick={toggleForm}
-        className="text-sm hover:text-teal-700 transition mt-4"
-      >
+      <div className="text-sm mt-4 px-4">
         {isLogin
-          ? "Don't have an account? Register"
-          : "Already have an account? Login"}
-      </button>
+          ? "Don't have an account?"
+          : "Already have an account?"}
+        <button
+          onClick={toggleForm}
+          className="ms-1 hover:text-teal-700 transition font-semibold"
+        >
+          {isLogin
+            ? "Register"
+            : "Login"}
+        </button>
+      </div>
     </div>
   );
 }

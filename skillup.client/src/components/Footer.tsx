@@ -2,24 +2,34 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="bg-slate-700 text-gray-200 p-3 mt-12">
-      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-        <p className="text-sm">
-          &copy; {new Date().getFullYear()} SkillUp. All rights reserved.
-        </p>
+    <footer className="bg-slate-800 text-gray-200 py-6">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left items-center">
 
-        <div className="flex space-x-4 mt-2 md:mt-0">
+        <div>
+          <img
+            src="/logo-gray-name.png"
+            alt="SkillUp Logo"
+            className="h-8 mx-auto md:mx-0"
+          />
+        </div>
+
+        <div className="text-sm text-gray-400">
+          &copy; {new Date().getFullYear()} SKILLUP. All rights reserved.
+        </div>
+
+        <div className="flex justify-center md:justify-end space-x-6 text-sm font-medium">
           <Link to="/about" className="hover:text-teal-700 transition">
             About
           </Link>
           <Link to="/contact" className="hover:text-teal-700 transition">
             Contact
           </Link>
-          <Link to="/privacy" className="hover:text-teal-700 transition">
-            Privacy Policy
+          <Link to="/faq" className="hover:text-teal-700 transition">
+            FAQ
           </Link>
         </div>
       </div>
     </footer>
+
   );
 }

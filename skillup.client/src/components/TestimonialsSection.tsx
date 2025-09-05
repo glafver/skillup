@@ -28,7 +28,7 @@ const TestimonialsSection: React.FC = () => {
                     {testimonials.map((t, i) => (
                         <article
                             key={i}
-                            className="bg-gray-100 rounded-2xl shadow-md p-6 flex items-start text-left transition-transform duration-300 ease-out hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]"
+                            className="bg-gray-100 rounded-xl shadow-md p-6 flex items-start text-left transition-transform duration-300 ease-out hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]"
                         >
                             <img
                                 src={t.img}

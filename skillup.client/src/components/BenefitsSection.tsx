@@ -31,7 +31,7 @@ const BenefitsSection: React.FC = () => {
                     {cards.map((c, i) => (
                         <article
                             key={i}
-                            className="bg-white rounded-2xl text-center shadow-md transition-transform duration-300 ease-out hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02]"
+                            className="bg-white rounded-xl text-center shadow-md transition-transform duration-300 ease-out hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02]"
                             aria-label={c.title}
                         >
                             <div className="py-6 pt-6 md:p-15">
