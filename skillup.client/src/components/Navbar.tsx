@@ -7,7 +7,6 @@ export function Navbar() {
     const location = useLocation();
     const [loggedIn, setLoggedIn] = useState(authService.isLoggedIn());
 
-    // Kör varje gång path ändras
     useEffect(() => {
         setLoggedIn(authService.isLoggedIn());
     }, [location]);
