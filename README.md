@@ -42,7 +42,7 @@ Runs backend API at http://localhost:5178
 
 ### 3. Environment Variables
 
-Rename the provided example.env in skillup.client folder to .env
+Make a copy of the provided example.env in skillup.client folder and rename it to .env
 
 ### 4. Setup Frontend
 

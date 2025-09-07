@@ -1,7 +1,15 @@
+import HeroSection from "../components/HeroSection";
+import BenefitsSection from "../components/BenefitsSection";
+import TestimonialsSection from "../components/TestimonialsSection";
+import AboutSection from "../components/AboutSection";
+
 export default function Home() {
   return (
-    <div className="container mx-auto">
-      <h1 className="text-2xl mb-4 text-center">Home Page</h1>
+    <div className="">
+      <HeroSection />
+      <BenefitsSection />
+      <TestimonialsSection />
+      <AboutSection />
     </div>
   );
 }
