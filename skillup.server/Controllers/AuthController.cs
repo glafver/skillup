@@ -23,7 +23,7 @@ namespace skillup.server.Controllers
 
             if (user == null)
                 return BadRequest(new { message = "Email is already in use." });
-
+        
             return Ok(new
             {
                 user.Id,

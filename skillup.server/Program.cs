@@ -40,6 +40,7 @@ namespace skillup.server
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
 
             //JWT
             var key = builder.Configuration["Jwt:Key"]
@@ -99,10 +100,28 @@ namespace skillup.server
 
             // Use CORS before Authorization
             app.UseCors("AllowAll");
-
+            
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
+
+            // Skickar in Seed data för att testa bas kurserna
+            // using (var scope = app.Services.CreateScope())
+            // {
+            //     var db = scope.ServiceProvider.GetRequiredService<SkillupDbContext>();
+            //     if (!db.Courses.Any())
+            //     {
+            //         db.Courses.AddRange(
+            //             new Course { Title = "C#", Description = "Learn basics of C#", ImageUrl = "csharp.png" },
+            //             new Course { Title = "Python", Description = "Learn Python from scratch", ImageUrl = "python.png" },
+            //             new Course { Title = "JavaScript", Description = "Build dynamic apps", ImageUrl = "javascript.png" },
+            //             new Course { Title = "HTML", Description = "Learn HTML structure", ImageUrl = "html.png" }
+            //         );
+            //         db.SaveChanges();
+            //     }
+            // }
+
 
             app.Run();
         }
