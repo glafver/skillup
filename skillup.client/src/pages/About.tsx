@@ -1,6 +1,13 @@
+import { motion } from "framer-motion";
+
 const About = () => {
     return (
-        <section className="container mx-auto px-6 py-12">
+        <motion.section
+            className="container mx-auto px-6 py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+        >
             <div className="text-center max-w-4xl mx-auto mb-12">
                 <h1 className="text-3xl md:text-4xl font-bold mb-6">About SKILLUP</h1>
                 <p className="text-lg leading-relaxed">
@@ -19,10 +26,10 @@ const About = () => {
                 <img
                     src="/about-skillup.png"
                     alt="SKILLUP Illustration"
-                    className="max-w-full h-auto"
+                    className="max-w-full h-150"
                 />
             </div>
-        </section>
+        </motion.section>
     );
 };
 

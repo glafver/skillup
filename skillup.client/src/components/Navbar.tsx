@@ -21,7 +21,7 @@ export function Navbar() {
     };
 
     const getLinkClasses = (path: string) =>
-        `hover:text-teal-700 transition block py-2 md:py-0 ${location.pathname === path ? "font-semibold" : ""
+        `hover:text-cyan-700 transition block py-2 md:py-0 ${location.pathname === path ? "font-semibold" : ""
         }`;
 
     return (

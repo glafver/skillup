@@ -1,11 +1,17 @@
 import { FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Contact = () => {
     return (
-        <section className="container mx-auto px-6 py-12">
+        <motion.section
+            className="container mx-auto px-6 py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+        >
             <div className="text-center max-w-2xl mx-auto mb-12">
                 <h1 className="text-3xl md:text-4xl font-bold mb-6">Contact Us</h1>
-                <p className=" text-gray-700">
+                <p className=" ">
                     Have questions or want to get in touch? Fill out the form or reach us directly.
                 </p>
             </div>
@@ -38,7 +44,7 @@ const Contact = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full  bg-cyan-700 text-white py-2 rounded-md hover:bg-teal-700 transition"
+                        className="w-full  bg-cyan-700 text-white py-2 rounded-md hover:bg-cyan-800 transition"
                     >
                         Send Message
                     </button>
@@ -55,13 +61,13 @@ const Contact = () => {
                     </div>
 
                     <div className="flex space-x-5 mt-4">
-                        <a href="#" className="text-cyan-700 hover:text-teal-700 text-2xl">
+                        <a href="#" className="text-cyan-700 hover:text-cyan-800 text-2xl">
                             <FaFacebook />
                         </a>
-                        <a href="#" className="text-cyan-700 hover:text-teal-700 text-2xl">
+                        <a href="#" className="text-cyan-700 hover:text-cyan-800 text-2xl">
                             <FaTwitter />
                         </a>
-                        <a href="#" className="text-cyan-700 hover:text-teal-700 text-2xl">
+                        <a href="#" className="text-cyan-700 hover:text-cyan-800 text-2xl">
                             <FaLinkedin />
                         </a>
                     </div>
@@ -74,7 +80,7 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </motion.section>
     );
 };
 
