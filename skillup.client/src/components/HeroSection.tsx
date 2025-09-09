@@ -28,7 +28,7 @@ const HeroSection: React.FC = () => {
                     <img
                         src="/hero-image.png"
                         alt="Learning illustration"
-                        className="w-full"
+                        className="w-150 p-16"
                     />
                 </div>
             </div>

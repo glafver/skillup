@@ -21,7 +21,7 @@ const cards = [
 
 const BenefitsSection: React.FC = () => {
     return (
-        <section className="w-full bg-gray-100 py-16">
+        <section className="w-full bg-gray-200 py-16">
             <div className="container mx-auto max-w-6xl px-4">
                 <h2 className="text-3xl md:text-4xl font-semibold text-center mb-10">
                     Why choose <span className="inline-block align-baseline font-bold">SKILLUP</span>

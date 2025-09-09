@@ -25,7 +25,7 @@ export function Navbar() {
         }`;
 
     return (
-        <nav className="bg-gray-200 p-4 md:p-6 mb-6">
+        <nav className="bg-gray-200 p-4 md:p-6">
             <div className="container mx-auto flex justify-between items-center">
                 <Link to="/" onClick={() => setMenuOpen(false)}>
                     <img
