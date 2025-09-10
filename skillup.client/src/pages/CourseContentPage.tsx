@@ -39,16 +39,33 @@ export default function CourseContentPage() {
     <LevelAccordion
       key={level.name}
       title={level.name}
-      defaultOpen={idx === 0} 
+      defaultOpen={idx === 0}
     >
-      <div className="bg-gray-50 border rounded p-4 whitespace-pre-wrap leading-relaxed">
-        {level.theoryText}
-      </div>
+  
+      {level.topics ? (
+        level.topics.map((topic, i) => (
+          <LevelAccordion key={i} title={topic.title}>
+            <div className="whitespace-pre-wrap leading-relaxed">
+              {topic.content}
+            </div>
+          </LevelAccordion>
+        ))
+      ) : (
+
+        <div className="bg-gray-50 border rounded p-4 whitespace-pre-wrap leading-relaxed">
+          {level.theoryText}
+        </div>
+      )}
+
 
       <div className="mt-4 flex items-center justify-end">
         <button
           className="px-5 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
-          onClick={() => navigate(`/quiz/${content.slug}?level=${encodeURIComponent(level.name)}`)}
+          onClick={() =>
+            navigate(
+              `/quiz/${content.slug}?level=${encodeURIComponent(level.name)}`
+            )
+          }
         >
           Start quiz
         </button>
