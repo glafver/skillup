@@ -1,80 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
-const Quiz: React.FC = () => {
-    const questions = [
-        {
-            id: 1,
-            question: "Which keyword is used to declare a variable in JavaScript?",
-            options: ["let", "var", "int", "constant"],
-        },
-        {
-            id: 2,
-            question: "Which symbol is used for single-line comments in JavaScript?",
-            options: ["//", "<!-- -->", "#", "/* */"],
-        },
-        {
-            id: 3,
-            question: "What will `typeof null` return in JavaScript?",
-            options: ["object", "null", "undefined", "boolean"],
-        },
-        {
-            id: 4,
-            question: "Which of the following is NOT a JavaScript data type?",
-            options: ["String", "Boolean", "Float", "Object"],
-        },
-        {
-            id: 5,
-            question: "Which method is used to parse a JSON string into a JavaScript object?",
-            options: ["JSON.parse()", "JSON.stringify()", "parse.JSON()", "toObject()"],
-        },
-        {
-            id: 6,
-            question: "What is the correct way to write an array in JavaScript?",
-            options: [
-                "let arr = [1, 2, 3];",
-                "let arr = (1, 2, 3);",
-                "let arr = {1, 2, 3};",
-                "let arr = <1, 2, 3>",
-            ],
-        },
-        {
-            id: 7,
-            question: "Which operator is used to assign a value to a variable?",
-            options: ["=", "==", "===", ":"],
-        },
-        {
-            id: 8,
-            question: "Which method adds one or more elements to the end of an array?",
-            options: ["push()", "pop()", "shift()", "unshift()"],
-        },
-        {
-            id: 9,
-            question: "Which symbol is used for strict equality comparison in JavaScript?",
-            options: ["===", "==", "=", "!="],
-        },
-        {
-            id: 10,
-            question: "Which function is used to print something in the console?",
-            options: ["console.log()", "print()", "log.console()", "echo()"],
-        },
-    ];
+interface QuizQuestion {
+    questionText: string;
+    options: string[];
+    answer: string;
+}
 
-    const robotImages = Array.from({ length: 20 }, (_, i) => `/quiz/robo-${i + 1}.png`);
+interface Quiz {
+    id?: string;
+    level: string;
+    questions: QuizQuestion[];
+}
+// Test with:
+// http://localhost:5173/quiz/js_beginner
 
+const Quiz: React.FC<{}> = () => {
+    const { level } = useParams<{ level?: string; }>();
+    const [questions, setQuestions] = useState<QuizQuestion[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [questionImages, setQuestionImages] = useState<string[]>([]);
     const [quizDone, setQuizDone] = useState(false);
 
+    if (!level) {
+        return <p>Level not specified</p>;
+    }
+
+    const robotImages = Array.from({ length: 20 }, (_, i) => `/quiz/robo-${i + 1}.png`);
+    const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
+
+    useEffect(() => {
+        const fetchQuiz = async () => {
+            try {
+                const res = await fetch(`${BASE_URL}/api/quiz?level=${level}`);
+                if (!res.ok) throw new Error("Failed to fetch quiz");
+                const data: Quiz[] = await res.json();
+                if (data.length > 0) {
+                    setQuestions(data[0].questions);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchQuiz();
+    }, [level]);
+
     useEffect(() => {
         const shuffled = [...robotImages].sort(() => Math.random() - 0.5);
         setQuestionImages(shuffled.slice(0, questions.length));
-    }, []);
+    }, [questions]);
 
     const handleAnswer = (answer: string) => {
         const storedAnswers = JSON.parse(localStorage.getItem("quizAnswers") || "{}");
-        storedAnswers[questions[currentIndex].id] = answer;
+        storedAnswers[questions[currentIndex].questionText] = answer;
         localStorage.setItem("quizAnswers", JSON.stringify(storedAnswers));
 
         if (currentIndex === questions.length - 1) {
@@ -84,6 +63,8 @@ const Quiz: React.FC = () => {
         }
     };
 
+    if (questions.length === 0) return <p>Loading quiz...</p>;
+
     const progress = ((currentIndex + 1) / questions.length) * 100;
 
     return (
@@ -92,7 +73,7 @@ const Quiz: React.FC = () => {
                 <AnimatePresence mode="wait">
                     {questionImages.length > 0 && (
                         <motion.img
-                            key={questionImages[currentIndex]} // important for AnimatePresence
+                            key={questionImages[currentIndex]}
                             src={questionImages[currentIndex]}
                             alt="Robot Illustration"
                             className="h-50 md:h-80 object-contain"
@@ -119,7 +100,7 @@ const Quiz: React.FC = () => {
             </div>
 
             <h2 className="text-2xl h-20 font-semibold mb-6 text-center">
-                {questions[currentIndex].question}
+                {questions[currentIndex].questionText}
             </h2>
 
             <div className="grid grid-cols-2 gap-8">
@@ -133,6 +114,7 @@ const Quiz: React.FC = () => {
                     </button>
                 ))}
             </div>
+
             <AnimatePresence>
                 {quizDone && (
                     <motion.div
@@ -152,9 +134,7 @@ const Quiz: React.FC = () => {
                                 You have finished the quiz. Let's go to your results!
                             </p>
                             <Link to="/results">
-                                <button
-                                    className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105"
-                                >
+                                <button className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105">
                                     Go to Results
                                 </button>
                             </Link>
