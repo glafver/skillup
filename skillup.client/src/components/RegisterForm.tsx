@@ -46,7 +46,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={firstname}
         onChange={(e) => setFirstname(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded-md"
+        className="w-full mb-2 p-2 border rounded-md bg-white"
       />
 
       <input
@@ -55,7 +55,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={lastname}
         onChange={(e) => setLastname(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded-md"
+        className="w-full mb-2 p-2 border rounded-md bg-white"
       />
 
       <input
@@ -64,7 +64,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded-md"
+        className="w-full mb-2 p-2 border rounded-md bg-white"
       />
 
       <input
@@ -74,7 +74,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         onChange={(e) => setPassword(e.target.value)}
         required
         autoComplete="current-password"
-        className="w-full mb-4 p-2 border rounded-md"
+        className="w-full mb-4 p-2 border rounded-md bg-white"
       />
 
       <button

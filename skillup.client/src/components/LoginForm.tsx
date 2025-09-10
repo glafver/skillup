@@ -43,7 +43,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
         onChange={(e) => setEmail(e.target.value)}
         required
         autoComplete="email"
-        className="w-full mb-2 p-2 border rounded-md"
+        className="w-full mb-2 p-2 border rounded-md bg-white"
       />
 
       <input
@@ -53,7 +53,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
         onChange={(e) => setPassword(e.target.value)}
         required
         autoComplete="current-password"
-        className="w-full mb-4 p-2 border rounded-md"
+        className="w-full mb-4 p-2 border rounded-md bg-white"
       />
 
       <button
