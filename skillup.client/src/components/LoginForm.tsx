@@ -3,7 +3,7 @@ import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
+export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -42,6 +42,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
+        autoComplete="email"
         className="w-full mb-2 p-2 border rounded-md"
       />
 

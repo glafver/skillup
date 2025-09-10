@@ -2,6 +2,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Courses from "./pages/Courses";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
@@ -19,8 +20,9 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/faq" element={< FAQ />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
       </main>
       <Footer />

@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <footer className="bg-slate-800 text-gray-200 py-6">
+    <footer className="bg-slate-800 text-gray-200 py-6 p-2">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left items-center">
-
         <div>
           <img
             src="/logo-gray-name.png"
@@ -30,6 +29,5 @@ export function Footer() {
         </div>
       </div>
     </footer>
-
   );
 }
