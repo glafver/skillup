@@ -4,24 +4,42 @@ namespace skillup.server.Services
     using skillup.server.Models;
     public class SkillupDbContext : DbContext
     {
-        public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
-        {
-        }
+        
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Course> Courses { get; set; }
+
+        public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
+        {
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+
+                modelBuilder.Entity<User>(entity =>
+                {
+                    entity.Property(u => u.Id)
+                        .HasConversion(
+                            id => id.ToString(),// MongoDB ObjectId till string när det sparas
+                            value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
+                        );
+                });
+
+                modelBuilder.Entity<Course>(entity =>
+                {
+                    entity.Property(c => c.Id)
+                        .HasConversion(
+                            id => id.ToString(),
+                            value => MongoDB.Bson.ObjectId.Parse(value)
+                        );
+
+                    entity.HasIndex(c => c.Title).IsUnique();
+                    
+                });
+
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.Property(u => u.Id)
-                    .HasConversion(
-                        id => id.ToString(),// MongoDB ObjectId till string när det sparas
-                        value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
-                    );
-            });
         }
 
     }

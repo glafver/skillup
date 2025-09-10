@@ -34,7 +34,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded">
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded-md">
       {error && <p className="text-red-500 mb-2">{error}</p>}
       {success && (
         <p className="text-green-500 mb-2">Registration successful!</p>
@@ -46,7 +46,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={firstname}
         onChange={(e) => setFirstname(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded"
+        className="w-full mb-2 p-2 border rounded-md"
       />
 
       <input
@@ -55,7 +55,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={lastname}
         onChange={(e) => setLastname(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded"
+        className="w-full mb-2 p-2 border rounded-md"
       />
 
       <input
@@ -64,7 +64,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded"
+        className="w-full mb-2 p-2 border rounded-md"
       />
 
       <input
@@ -74,12 +74,12 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         onChange={(e) => setPassword(e.target.value)}
         required
         autoComplete="current-password"
-        className="w-full mb-4 p-2 border rounded"
+        className="w-full mb-4 p-2 border rounded-md"
       />
 
       <button
         type="submit"
-        className="w-full bg-cyan-700 text-gray-200 p-2 rounded"
+        className="w-full bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
       >
         Register
       </button>

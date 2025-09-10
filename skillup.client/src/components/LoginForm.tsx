@@ -3,7 +3,7 @@ import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
+export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -29,7 +29,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded">
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4 rounded-md">
       {successMessage && (
         <p className="text-green-500 mb-2">{successMessage}</p>
       )}
@@ -42,7 +42,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="w-full mb-2 p-2 border rounded"
+        className="w-full mb-2 p-2 border rounded-md"
       />
 
       <input
@@ -52,12 +52,12 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
         onChange={(e) => setPassword(e.target.value)}
         required
         autoComplete="current-password"
-        className="w-full mb-4 p-2 border rounded"
+        className="w-full mb-4 p-2 border rounded-md"
       />
 
       <button
         type="submit"
-        className="w-full bg-cyan-700 text-gray-200 p-2 rounded"
+        className="w-full bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
       >
         Login
       </button>

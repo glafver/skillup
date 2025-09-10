@@ -1,7 +1,9 @@
+using MongoDB.Bson;
+using skillup.server.Models;
+
 namespace skillup.server.Services
 {
-    using MongoDB.Bson;
-    using skillup.server.Models;
+    
 
     public interface IUserService
     {
