@@ -34,7 +34,7 @@ namespace skillup.server.Services
                 Lastname = lastname,
                 Email = email
             };
-
+            
             user.PasswordHash = _passwordHasher.HashPassword(user, password);
             await _userService.CreateAsync(user);
             return user;
@@ -51,7 +51,7 @@ namespace skillup.server.Services
 
             return GenerateJwtToken(user);
         }
-
+        
         private string GenerateJwtToken(User user)
         {
             var keyString = _configuration["Jwt:Key"]

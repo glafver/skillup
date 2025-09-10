@@ -1,6 +1,7 @@
 using skillup.server.Models;
 
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 namespace skillup.server.Models
@@ -8,16 +9,26 @@ namespace skillup.server.Models
     [Collection("Courses")]
     public class Course
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = string.Empty;
+
+        [BsonElement("title")]
+        public string Title { get; set; } = string.Empty;
         
-        public ObjectId Id { get; set; } = default!;
+        [BsonElement("description")]
+        public string Description { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Title is required")]
-        public string Title { get; set; } = default!;
+        [BsonElement("image")]
+        public string Image { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Description is required")]
-        public string Description { get; set; } = default!;
+        [BsonElement("slug")]
+        public string Slug { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "ImageUrl is required")]
-        public string ImageUrl { get; set; } = default!;
+        [BsonElement("category")]
+        public string? Category { get; set; }
+        
+        [BsonElement("levelCount")]
+        public int LevelCount { get; set; } = 3;
     }
 }

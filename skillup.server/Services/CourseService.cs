@@ -18,8 +18,7 @@ namespace skillup.server.Services
 
         public async Task<Course?> GetCourseByIdAsync(string id)
         {
-            if (!ObjectId.TryParse(id, out var oid)) return null;
-            return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == oid);
+            return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Course> AddCourseAsync(Course course)

@@ -5,7 +5,8 @@ export default function Courses() {
     type Course = {
     title: string;
     description: string;
-    imageUrl: string;
+    image: string;
+    slug: string;
     };
 
     const [courses, setCourses] = useState<Course[]>([]);
@@ -32,14 +33,15 @@ export default function Courses() {
         <div className="container mx-auto">
             <h1 className="text-2xl mb-4 text-center">Courses Page</h1>
 
-            <div className="max-w-3xl mx-auto space-y-4">
-                <ul className="flex flex-col gap-4">
+            <div className="max-w-8xl mx-auto space-y-4">
+                <ul className="flex flex-col grid grid-cols-2 gap-8">
                 {courses.map((course, idx) => (
                     <li key={idx}>
                     <CourseCard
                         title={course.title}
                         description={course.description}
-                        imageUrl={course.imageUrl}
+                        image={course.image}
+                        slug={course.slug}
                     />
                     </li>
                 ))}

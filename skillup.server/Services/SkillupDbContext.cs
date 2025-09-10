@@ -19,20 +19,11 @@ namespace skillup.server.Services
 
                 modelBuilder.Entity<User>(entity =>
                 {
-                    entity.Property(u => u.Id)
-                        .HasConversion(
-                            id => id.ToString(),// MongoDB ObjectId till string när det sparas
-                            value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
-                        );
+                    entity.HasIndex(u => u.Email).IsUnique();
                 });
 
                 modelBuilder.Entity<Course>(entity =>
                 {
-                    entity.Property(c => c.Id)
-                        .HasConversion(
-                            id => id.ToString(),
-                            value => MongoDB.Bson.ObjectId.Parse(value)
-                        );
 
                     entity.HasIndex(c => c.Title).IsUnique();
                     
