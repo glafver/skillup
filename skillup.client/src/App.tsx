@@ -6,6 +6,7 @@ import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import Quiz from "./pages/Quiz";
+import NotFound from "./pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -23,6 +24,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
           <Route path="/quiz/:level" element={<Quiz />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
