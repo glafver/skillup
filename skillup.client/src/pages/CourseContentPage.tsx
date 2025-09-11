@@ -6,6 +6,12 @@ import LevelAccordion from "../components/LevelAccordion";
 export default function CourseContentPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const quizSlugMap: Record<string, string> = {
+  javascript: "js",   
+  csharp: "csharp",
+  python: "python",
+  html: "html",
+  };
   const [content, setContent] = useState<CourseContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +67,10 @@ export default function CourseContentPage() {
       <div className="mt-4 flex items-center justify-end">
         <button
           className="px-5 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transform transition duration-300 hover:scale-105 shadow-md"
-          onClick={() => navigate(`/quiz/${content.slug}_${level.name.toLowerCase()}`)}
+onClick={() =>
+  navigate(`/quiz/${quizSlugMap[content.slug]}_${level.name.toLowerCase()}`)
+}
+
 
         >
           Start quiz
