@@ -7,8 +7,8 @@ namespace skillup.server.Services
         
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; } = null!;
 
         public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
         {
@@ -36,6 +36,15 @@ namespace skillup.server.Services
 
                     entity.HasIndex(c => c.Title).IsUnique();
                     
+                });
+
+                modelBuilder.Entity<Quiz>(entity =>
+                {
+                    entity.Property(q => q.Id)
+                          .HasConversion(
+                              id => id.ToString(),
+                              value => MongoDB.Bson.ObjectId.Parse(value)
+                          );
                 });
 
             base.OnModelCreating(modelBuilder);

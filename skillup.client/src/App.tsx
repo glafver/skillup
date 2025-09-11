@@ -6,6 +6,7 @@ import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import CourseContentPage from "./pages/CourseContentPage";
+import Quiz from "./pages/Quiz";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -24,6 +25,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
           <Route path="/courses/:slug" element={<CourseContentPage />} />
+          <Route path="/quiz/:level" element={<Quiz />} />
         </Routes>
       </main>
       <Footer />

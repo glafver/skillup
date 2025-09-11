@@ -18,7 +18,7 @@ const HeroSection: React.FC = () => {
                         Start your journey and gain new skills with ease.
                     </p>
                     <Link to="/courses">
-                        <button className="bg-cyan-700 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105">
+                        <button className="bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105">
                             Start learning
                         </button>
                     </Link>
@@ -28,7 +28,7 @@ const HeroSection: React.FC = () => {
                     <img
                         src="/hero-image.png"
                         alt="Learning illustration"
-                        className="w-full"
+                        className="w-150 p-16"
                     />
                 </div>
             </div>
