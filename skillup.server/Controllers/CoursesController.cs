@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using skillup.server.Models;
 using skillup.server.Services;
+using skillup.server.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace skillup.server.Controllers
 {
@@ -59,5 +61,20 @@ namespace skillup.server.Controllers
             await _service.DeleteCourseAsync(id);
             return NoContent();
         }
+
+        [HttpPost("{slug}/started")]
+        [Authorize]
+        public async Task<IActionResult> StartCourse(string slug)
+        {
+
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+
+            var result = await _service.AddActiveCourseAsync(userId, slug, );
+            if (result is null) return BadRequest("Could not start course.");
+
+            return Ok(new { message = "Course started!", result });
+        }
+
     }
 }

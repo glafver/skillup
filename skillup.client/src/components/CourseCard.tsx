@@ -1,12 +1,47 @@
-import { useMemo } from "react";
-import { Button } from "./Button";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/authService";
 
-const imageMap = import.meta.glob("../images/*", { eager: true, as: "url" }) as Record<string, string>;
+type Props = {
+  title: string;
+  description: string;
+  image: string;
+  slug: string;
+};
 
-export const CourseCard = ({title, description, imageUrl}: {title: string, description: string, imageUrl: string}) => {
-    const src = useMemo(() => {
-    return imageMap[`../images/${imageUrl}`];
-  }, [imageUrl]);
+export const CourseCard = ({ title, description, image, slug }: Props) => {
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const startCourse = async () => {
+    if (!authService.isLoggedIn()) {
+      alert("Please log in to start the course.");
+      navigate("/account");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/api/courses/${slug}/started`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authService.getToken()}`,
+        },
+      });
+
+      if (res.ok) {
+        alert("Course started!");
+        navigate(`/course/${slug}`);
+        return;
+      }
+
+      const text = await res.text();
+      alert(text || "Failed to start course.");
+    } catch (err) {
+      console.error(err);
+      alert("Network error.");
+    }
+  };
+
 
   return (
     // Cards vertikalt

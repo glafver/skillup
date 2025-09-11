@@ -9,6 +9,7 @@ namespace skillup.server.Services
         Task<Course?> GetCourseByIdAsync(string id);
         Task<Course> AddCourseAsync(Course course);
         Task UpdateCourseAsync(Course course);
-        Task DeleteCourseAsync(string id);
+        Task<bool> DeleteCourseAsync(string id);
+        Task<ActiveCourse> AddActiveCourseAsync(string userId, string courseSlug);
     }
 }

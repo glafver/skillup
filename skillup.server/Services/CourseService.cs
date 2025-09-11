@@ -24,8 +24,8 @@ namespace skillup.server.Services
 
         public async Task<Course> AddCourseAsync(Course course)
         {
-            course.Title = course.Title?.Trim();
-            course.Description = course.Description?.Trim();
+            course.Title = course.Title.Trim();
+            course.Description = course.Description.Trim();
 
             try
             {
@@ -45,12 +45,37 @@ namespace skillup.server.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCourseAsync(string id)
+        public async Task<bool> DeleteCourseAsync(string id)
         {
             var course = await GetCourseByIdAsync(id);
-            if (course is null) return;
+            if (course is null) return false;
+
             _dbContext.Courses.Remove(course);
             await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        // Lägg till kurs till användarens aktiva kurser
+        public async Task<ActiveCourse> AddActiveCourseAsync(string userId, string courseSlug)
+        {
+            var existing = await _dbContext.ActiveCourses
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+
+            if (existing != null) return existing;
+
+            var activeCourse = new ActiveCourse
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                UserId = userId,
+                CourseSlug = courseSlug,
+                StartedAt = DateTime.UtcNow,
+                CurrentLevel = LevelCode.Beginner,
+                Status = ActiveCourseStatus.Completed
+            };
+
+            _dbContext.ActiveCourses.Add(activeCourse);
+            await _dbContext.SaveChangesAsync();
+            return activeCourse;
         }
     }
 }
