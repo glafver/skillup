@@ -106,22 +106,6 @@ namespace skillup.server
 
             app.MapControllers();
 
-            // Skickar in Seed data för att testa bas kurserna
-            // using (var scope = app.Services.CreateScope())
-            // {
-            //     var db = scope.ServiceProvider.GetRequiredService<SkillupDbContext>();
-            //     if (!db.Courses.Any())
-            //     {
-            //         db.Courses.AddRange(
-            //             new Course { Title = "C#", Description = "Learn basics of C#", ImageUrl = "csharp.png" },
-            //             new Course { Title = "Python", Description = "Learn Python from scratch", ImageUrl = "python.png" },
-            //             new Course { Title = "JavaScript", Description = "Build dynamic apps", ImageUrl = "javascript.png" },
-            //             new Course { Title = "HTML", Description = "Learn HTML structure", ImageUrl = "html.png" }
-            //         );
-            //         db.SaveChanges();
-            //     }
-            // }
-
             app.Run();
         }
     }

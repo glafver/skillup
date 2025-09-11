@@ -62,18 +62,26 @@ namespace skillup.server.Controllers
             return NoContent();
         }
 
-        [HttpPost("{slug}/started")]
+       [HttpPost("{slug}/started")]
         [Authorize]
         public async Task<IActionResult> StartCourse(string slug)
         {
-
             var userId = User.GetUserId();
             if (userId is null) return Unauthorized();
 
-            var result = await _service.AddActiveCourseAsync(userId, slug, );
-            if (result is null) return BadRequest("Could not start course.");
-
+            var result = await _service.AddActiveCourseAsync(userId, slug);
             return Ok(new { message = "Course started!", result });
+        }
+
+        [HttpGet("{slug}/status")]
+        [Authorize]
+        public async Task<IActionResult> GetCourseStatus(string slug)
+        {
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+
+            var isActive = await _service.IsCourseActiveAsync(userId, slug);
+            return Ok(new { active = isActive });
         }
 
     }

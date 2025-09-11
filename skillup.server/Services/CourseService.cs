@@ -18,8 +18,7 @@ namespace skillup.server.Services
 
         public async Task<Course?> GetCourseByIdAsync(string id)
         {
-            if (!ObjectId.TryParse(id, out var oid)) return null;
-            return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == oid);
+             return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Course> AddCourseAsync(Course course)
@@ -70,12 +69,18 @@ namespace skillup.server.Services
                 CourseSlug = courseSlug,
                 StartedAt = DateTime.UtcNow,
                 CurrentLevel = LevelCode.Beginner,
-                Status = ActiveCourseStatus.Completed
+                Status = ActiveCourseStatus.Active
             };
 
             _dbContext.ActiveCourses.Add(activeCourse);
             await _dbContext.SaveChangesAsync();
             return activeCourse;
+        }
+
+        public async Task<bool> IsCourseActiveAsync(string userId, string courseSlug)
+        {
+            return await _dbContext.ActiveCourses
+                .AnyAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
         }
     }
 }
