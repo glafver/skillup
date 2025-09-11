@@ -61,11 +61,8 @@ export default function CourseContentPage() {
       <div className="mt-4 flex items-center justify-end">
         <button
           className="px-5 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transform transition duration-300 hover:scale-105 shadow-md"
-          onClick={() =>
-            navigate(
-              `/quiz/${content.slug}?level=${encodeURIComponent(level.name)}`
-            )
-          }
+          onClick={() => navigate(`/quiz/${content.slug}_${level.name.toLowerCase()}`)}
+
         >
           Start quiz
         </button>
