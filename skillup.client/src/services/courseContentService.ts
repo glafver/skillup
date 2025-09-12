@@ -3,6 +3,7 @@ const API = import.meta.env.VITE_API_URL ?? "http://localhost:5178";
 export type CourseTopic = {
   title: string;
   content: string;
+  imageUrl?: string;
 };
 
 

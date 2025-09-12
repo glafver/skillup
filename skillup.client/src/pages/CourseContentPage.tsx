@@ -46,14 +46,23 @@ export default function CourseContentPage() {
       key={level.name}
       title={level.name}
       defaultOpen={idx === 0}
+      variant="level"
     >
   
       {level.topics ? (
         level.topics.map((topic, i) => (
-          <LevelAccordion key={i} title={topic.title}>
+          <LevelAccordion key={i} title={topic.title} variant="topic">
             <div className="whitespace-pre-wrap leading-relaxed">
               {topic.content}
             </div>
+
+      {topic.imageUrl && (
+        <img
+        src={topic.imageUrl}
+        alt={topic.title + " example"}
+        className="mt-3 rounded-lg shadow-md max-w-xs mx-left"
+        />
+      )}
           </LevelAccordion>
         ))
       ) : (
@@ -67,8 +76,8 @@ export default function CourseContentPage() {
       <div className="mt-4 flex items-center justify-end">
         <button
           className="px-5 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transform transition duration-300 hover:scale-105 shadow-md"
-onClick={() =>
-  navigate(`/quiz/${quizSlugMap[content.slug]}_${level.name.toLowerCase()}`)
+          onClick={() =>
+          navigate(`/quiz/${quizSlugMap[content.slug]}_${level.name.toLowerCase()}`)
 }
 
 

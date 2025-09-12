@@ -30,7 +30,7 @@ namespace skillup.server.Models
         [BsonElement("theoryText")]
         public string? TheoryText { get; set; }
     }
-    
+
     public class CourseTopic
     {
         [BsonElement("title")]
@@ -38,5 +38,8 @@ namespace skillup.server.Models
 
         [BsonElement("content")]
         public string Content { get; set; } = string.Empty;
+
+        [BsonElement("imageUrl")]
+        public string imageUrl { get; set; } = string.Empty;
     }
 }

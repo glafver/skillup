@@ -4,9 +4,10 @@ type Props = {
   title: string;
   defaultOpen?: boolean;
   children: React.ReactNode;
+  variant?: "level" | "topic";
 };
 
-export default function LevelAccordion({ title, defaultOpen, children }: Props) {
+export default function LevelAccordion({ title, defaultOpen, children, variant = "level" }: Props) {
   const [open, setOpen] = useState(!!defaultOpen);
 
   return (
@@ -16,7 +17,9 @@ export default function LevelAccordion({ title, defaultOpen, children }: Props) 
              duration-200 hover:scale-[1.01]"
         onClick={() => setOpen(o => !o)}
       >
-        <span className="font-semibold">{title}</span>
+      <span className={variant === "level" ? "font-bold text-lg" : "font-medium"}>
+      {title}
+      </span>
 <span className={`transform transition-transform duration-300 ${open ? "rotate-180" : "rotate-0"}`}>
   ▼
 </span>
@@ -29,7 +32,8 @@ export default function LevelAccordion({ title, defaultOpen, children }: Props) 
     opacity: open ? 1 : 0  
   }}
 >
-  <div className="px-4 pb-4">{children}</div>
+<div className="px-4 pb-4">{children}</div>
+
 </div>
     </div>
   );
