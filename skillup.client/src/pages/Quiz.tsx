@@ -31,6 +31,8 @@ const Quiz: React.FC<{}> = () => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
 
     useEffect(() => {
+        localStorage.removeItem("quizAnswers");
+
         const fetchQuiz = async () => {
             try {
                 const res = await fetch(`${BASE_URL}/api/quiz?level=${level}`);
@@ -76,7 +78,7 @@ const Quiz: React.FC<{}> = () => {
                             key={questionImages[currentIndex]}
                             src={questionImages[currentIndex]}
                             alt="Robot Illustration"
-                            className="h-50 md:h-80 object-contain"
+                            className="h-50 md:h-[30vh] object-contain"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}

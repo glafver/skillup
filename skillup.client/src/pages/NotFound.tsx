@@ -1,10 +1,10 @@
 const NotFound: React.FC = () => {
     return (
-        <div className="flex flex-col items-center justify-center flex-grow">
+        <div className="flex flex-col flex-1 items-center justify-center ">
             <img
                 src="/404.png"
                 alt="Not found illustration"
-                className="max-h-full max-w-full object-contain"
+                className="h-150 object-contain"
             />
         </div>
     );

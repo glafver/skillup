@@ -14,8 +14,8 @@ import { Footer } from "./components/Footer";
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
-      <main className="flex-grow">
-        <Navbar />
+      <Navbar />
+      <main className="flex flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/courses" element={<Courses />} />
