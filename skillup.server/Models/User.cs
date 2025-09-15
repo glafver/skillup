@@ -4,6 +4,7 @@ namespace skillup.server.Models
     using MongoDB.Bson;
     public class User
     {
+        
         public ObjectId Id { get; set; }
         [Required(ErrorMessage = "Firstname is required")]
         public string Firstname { get; set; } = string.Empty;
