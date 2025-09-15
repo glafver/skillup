@@ -90,9 +90,14 @@ export default function CourseContentPage() {
 </div>
 
 <div className="mt-6">
-  <button
-  className="text-blue-600 underline"
-  onClick={() => navigate("/")}>Back</button>
+<button
+  onClick={() => navigate("/")}
+  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 
+             transition transform hover:scale-105 shadow-sm"
+>
+  ⬅ Back
+</button>
+
 </div>
     </div>
   );
