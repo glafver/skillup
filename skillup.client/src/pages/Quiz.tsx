@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useParams, Link, useLocation } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { authService } from "../services/authService";
 
 interface QuizQuestion {
+    id: number;
     questionText: string;
     options: string[];
     answer: string;
@@ -13,10 +15,16 @@ interface Quiz {
     level: string;
     questions: QuizQuestion[];
 }
+
+interface UserAnswer {
+    questionId: number;
+    answer: string;
+}
+
 // Test with:
 // http://localhost:5173/quiz/javascript?level=Beginner
 
-const Quiz: React.FC<{}> = () => {
+const Quiz: React.FC = () => {
     const { slug } = useParams<{ slug: string; }>();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -27,9 +35,9 @@ const Quiz: React.FC<{}> = () => {
     const [questionImages, setQuestionImages] = useState<string[]>([]);
     const [quizDone, setQuizDone] = useState(false);
 
-    if (!level) {
-        return <p>Level not specified</p>;
-    }
+    const navigate = useNavigate();
+
+    if (!level) return <p>Level not specified</p>;
 
     const robotImages = Array.from({ length: 20 }, (_, i) => `/quiz/robo-${i + 1}.png`);
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
@@ -37,20 +45,24 @@ const Quiz: React.FC<{}> = () => {
     useEffect(() => {
         localStorage.removeItem("quizAnswers");
 
+        if (!authService.isLoggedIn()) {
+            navigate("/account");
+            return;
+        }
+
         const fetchQuiz = async () => {
             try {
                 const res = await fetch(`${BASE_URL}/api/quiz/${slug}?level=${level}`);
                 if (!res.ok) throw new Error("Failed to fetch quiz");
                 const data: Quiz[] = await res.json();
-                if (data.length > 0) {
-                    setQuestions(data[0].questions);
-                }
+                if (data.length > 0) setQuestions(data[0].questions);
             } catch (err) {
                 console.error(err);
             }
         };
+
         if (slug && level) fetchQuiz();
-    }, [slug, level]);
+    }, [slug, level, BASE_URL]);
 
     useEffect(() => {
         const shuffled = [...robotImages].sort(() => Math.random() - 0.5);
@@ -58,8 +70,10 @@ const Quiz: React.FC<{}> = () => {
     }, [questions]);
 
     const handleAnswer = (answer: string) => {
-        const storedAnswers = JSON.parse(localStorage.getItem("quizAnswers") || "{}");
-        storedAnswers[questions[currentIndex].questionText] = answer;
+        const storedAnswers: UserAnswer[] = JSON.parse(localStorage.getItem("quizAnswers") || "[]");
+
+        storedAnswers.push({ questionId: currentIndex, answer });
+
         localStorage.setItem("quizAnswers", JSON.stringify(storedAnswers));
 
         if (currentIndex === questions.length - 1) {
@@ -75,7 +89,6 @@ const Quiz: React.FC<{}> = () => {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 mb-8">
-            <h1>{slug} – {level}</h1>
             <div className="flex justify-center mb-6">
                 <AnimatePresence mode="wait">
                     {questionImages.length > 0 && (
@@ -93,11 +106,14 @@ const Quiz: React.FC<{}> = () => {
                 </AnimatePresence>
             </div>
 
+            <h1 className="mb-2 text-2xl font-semibold text-cyan-700">
+                <span className="capitalize">{slug}</span> – {level}
+            </h1>
             <p className="mb-2 font-semibold text-cyan-700">
                 Question {currentIndex + 1} of {questions.length}
             </p>
 
-            <div className="w-full bg-gray-200 rounded-full h-3 mb-12">
+            <div className="w-full bg-gray-200 rounded-full h-3 mb-8">
                 <motion.div
                     className="bg-cyan-700 h-3 rounded-full"
                     initial={{ width: 0 }}
@@ -106,7 +122,7 @@ const Quiz: React.FC<{}> = () => {
                 />
             </div>
 
-            <h2 className="text-2xl font-semibold mb-6 text-center">
+            <h2 className="text-xl h-10 font-semibold mb-6 text-center">
                 {questions[currentIndex].questionText}
             </h2>
 
@@ -137,10 +153,8 @@ const Quiz: React.FC<{}> = () => {
                             transition={{ duration: 0.3 }}
                         >
                             <h2 className="text-2xl font-bold mb-4">🎉 Quiz Completed!</h2>
-                            <p className="mb-6">
-                                You have finished the quiz. Let's go to your results!
-                            </p>
-                            <Link to="/results">
+                            <p className="mb-6">You have finished the quiz. Let's go to your results!</p>
+                            <Link to={`/quiz/${slug}/results?level=${level}`}>
                                 <button className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105">
                                     Go to Results
                                 </button>
