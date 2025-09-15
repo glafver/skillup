@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const AboutSection: React.FC = () => {
     return (
-        <section className="w-full bg-gray-100 py-8">
+        <section className="w-full bg-gray-200 py-8">
             <div className="container mx-auto max-w-6xl px-6 grid md:grid-cols-3 md:gap-12 items-center">
 
                 <div className="md:col-span-2">
@@ -25,7 +25,7 @@ const AboutSection: React.FC = () => {
                         Our mission is to make coding simple, engaging, and accessible for everyone.
                     </p>
                     <Link to="/about">
-                        <button className="bg-cyan-700 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105 cursor-pointer">
+                        <button className="bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105 cursor-pointer">
                             Read More
                         </button>
                     </Link>
