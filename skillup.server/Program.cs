@@ -41,6 +41,7 @@ namespace skillup.server
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddSingleton<CourseContentService>();
             builder.Services.AddScoped<IQuizService, QuizService>();
 
             //JWT

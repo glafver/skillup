@@ -5,12 +5,14 @@ import Account from "./pages/Account";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
+import CourseContentPage from "./pages/CourseContentPage";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+
 
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
+          <Route path="/courses/:slug" element={<CourseContentPage />} />
           <Route path="/quiz/:slug" element={<Quiz />} />
           <Route path="/quiz/:slug/results" element={<Results />} />
           <Route path="*" element={<NotFound />} />

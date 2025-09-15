@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using skillup.server.Models;
 using skillup.server.Services;
 using skillup.server.Extensions;
