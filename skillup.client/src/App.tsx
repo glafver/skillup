@@ -23,7 +23,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
-          <Route path="/quiz/:level" element={<Quiz />} />
+          <Route path="/quiz/:slug" element={<Quiz />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
