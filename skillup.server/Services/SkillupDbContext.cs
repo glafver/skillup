@@ -8,6 +8,7 @@ namespace skillup.server.Services
 
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<ActiveCourse> ActiveCourses { get; set; }
         public DbSet<Quiz> Quizzes { get; set; } = null!;
 
         public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
