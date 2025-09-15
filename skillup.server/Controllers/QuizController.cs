@@ -13,11 +13,11 @@ public class QuizController : ControllerBase
         _quizService = quizService;
     }
 
-    // GET api/quiz?level=js_beginner
-    [HttpGet]
-    public async Task<ActionResult<List<Quiz>>> GetQuizzes([FromQuery] string level)
+    // GET api/quiz/javascript?level=Beginner
+    [HttpGet("{slug}")]
+    public async Task<ActionResult<List<Quiz>>> GetQuizzesBySlug(string slug, [FromQuery] string level)
     {
-        var quizzes = await _quizService.GetQuizzesByLevelAsync(level);
+        var quizzes = await _quizService.GetQuizzesBySlugAndLevelAsync(slug, level);
         return Ok(quizzes);
     }
 
@@ -26,6 +26,6 @@ public class QuizController : ControllerBase
     public async Task<ActionResult<Quiz>> CreateQuiz([FromBody] Quiz quiz)
     {
         var createdQuiz = await _quizService.AddQuizAsync(quiz);
-        return CreatedAtAction(nameof(GetQuizzes), new { id = createdQuiz.Id }, createdQuiz);
+        return CreatedAtAction(nameof(GetQuizzesBySlug), new { slug = createdQuiz.Slug, level = createdQuiz.Level }, createdQuiz);
     }
 }

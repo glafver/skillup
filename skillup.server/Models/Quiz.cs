@@ -13,8 +13,12 @@ namespace skillup.server.Models
         public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
         [Required]
+        [BsonElement("slug")]
+        public string Slug { get; set; } = default!; 
+
+        [Required]
         [BsonElement("level")]
-        public string Level { get; set; } = default!;
+        public string Level { get; set; } = default!; 
 
         [Required]
         [BsonElement("questions")]
