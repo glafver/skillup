@@ -12,7 +12,6 @@ namespace skillup.server.Services
         Task<User?> GetByEmailAsync(string email);
         Task<User> CreateAsync(User user);
         Task DeleteAsync(string id);
-        Task<bool> UpdateEmailAsync(string id, string newEmail);
-        Task<bool> UpdatePasswordAsync(string id, string newPassword);
+        Task<bool> UpdateAsync(User user);
     }
 }

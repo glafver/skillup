@@ -4,6 +4,14 @@ export interface Profile {
   email: string;
 }
 
+export interface UpdateProfileRequest {
+  firstname: string;
+  lastname: string;
+  email: string;
+  password?: string | null;
+  confirmPassword?: string | null;
+}
+
 const API_URL = "http://localhost:5178/api/profile";
 
 const getToken = () => {
@@ -12,7 +20,7 @@ const getToken = () => {
   return token;
 };
 
-export const getProfile = async (): Promise<Profile> => {
+const getProfile = async (): Promise<Profile> => {
   const res = await fetch(`${API_URL}/current`, {
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -22,30 +30,17 @@ export const getProfile = async (): Promise<Profile> => {
   return res.json();
 };
 
-export const updateEmail = async (email: string) => {
-  const res = await fetch(`${API_URL}/update-email`, {
+const updateProfile = async (data: UpdateProfileRequest) => {
+  const res = await fetch(`${API_URL}/update`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(data),
   });
-  if (!res.ok) throw new Error("Failed to update email");
+  if (!res.ok) throw new Error("Failed to update profile");
   return res.json();
 };
 
-export const updatePassword = async (password: string) => {
-  const res = await fetch(`${API_URL}/update-password`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getToken()}`,
-    },
-    body: JSON.stringify({ password }),
-  });
-  if (!res.ok) throw new Error("Failed to update password");
-  return res.json();
-};
-
-export default { getProfile, updateEmail, updatePassword };
+export default { getProfile, updateProfile };

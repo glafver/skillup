@@ -49,26 +49,36 @@ namespace skillup.server.Services
             }
         }
 
-        public async Task<bool> UpdateEmailAsync(string id, string newEmail)
+        public async Task<bool> UpdateAsync(User user)
         {
-            var user = await GetByIdAsync(id);
-            if (user == null) return false;
+            var existingUser = await GetByIdAsync(user.Id.ToString());
+            if (existingUser == null) return false;
 
-            user.Email = newEmail;
-            _context.Users.Update(user);
+            existingUser.Firstname = user.Firstname;
+            existingUser.Lastname = user.Lastname;
+            existingUser.Email = user.Email;
+
+            // Om användaren har skickat in ett nytt hashat lösenord
+            if (!string.IsNullOrEmpty(user.PasswordHash) && user.PasswordHash != existingUser.PasswordHash)
+            {
+                existingUser.PasswordHash = user.PasswordHash;
+            }
+
+            _context.Users.Update(existingUser);
             await _context.SaveChangesAsync();
             return true;
-        }
+}
 
-        public async Task<bool> UpdatePasswordAsync(string id, string newPassword)
-        {
-            var user = await GetByIdAsync(id);
-            if (user == null) return false;
 
-            user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return true;
-        }
+        // public async Task<bool> UpdatePasswordAsync(string id, string newPassword)
+        // {
+        //     var user = await GetByIdAsync(id);
+        //     if (user == null) return false;
+
+        //     user.PasswordHash = _passwordHasher.HashPassword(user, newPassword);
+        //     _context.Users.Update(user);
+        //     await _context.SaveChangesAsync();
+        //     return true;
+        // }
     }
 }

@@ -1,104 +1,136 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import type { Profile, UpdateProfileRequest } from "../services/profileService";
 import profileService from "../services/profileService";
-import type { Profile } from "../services/profileService";
 
-const Profile = () => {
+export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [newEmail, setNewEmail] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [form, setForm] = useState<UpdateProfileRequest>({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/account");
-      return;
-    }
+    profileService.getProfile().then((data) => {
+      setProfile(data);
+      setForm({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email,
+        password: "",
+        confirmPassword: "",
+      });
+    });
+  }, []);
 
-    const fetchProfile = async () => {
-      try {
-        const data = await profileService.getProfile();
-        setProfile(data);
-      } catch {
-        setMessage("Failed to load profile");
-      }
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    fetchProfile();
-  }, [navigate]);
-
-  const handleUpdateEmail = async () => {
-    if (!newEmail) return;
+  const handleSave = async () => {
     try {
-      await profileService.updateEmail(newEmail);
-      setProfile((prev) => (prev ? { ...prev, email: newEmail } : prev));
-      setMessage("Email updated!");
-      setNewEmail("");
-    } catch (err) {
-      setMessage("Failed to update email");
+      await profileService.updateProfile(form);
+      setMessage("Profile updated successfully ✅");
+    } catch {
+      setMessage("Failed to update profile ❌");
     }
   };
 
-  const handleUpdatePassword = async () => {
-    if (!newPassword) return;
-    try {
-      await profileService.updatePassword(newPassword);
-      setMessage("Password updated!");
-      setNewPassword("");
-    } catch (err) {
-      setMessage("Failed to update password");
-    }
-  };
-
-  if (!profile) return <p>Loading profile...</p>;
+  if (!profile) return <p>Loading...</p>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
-      <h2 className="text-2xl font-bold mb-4 text-slate-700 text-center">
-        Hello {profile.firstname} {profile.lastname}!
-      </h2>
+    <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="bg-gray-200 shadow rounded-lg p-6 flex flex-col items-center">
+        <img
+          src="https://cdn-icons-png.freepik.com/512/6997/6997484.png"
+          alt="UserAvatar"
+          className="w-24 h-24 rounded-full mb-4"
+        />
+        <h3 className="text-lg font-semibold">
+          {profile.firstname} {profile.lastname}
+        </h3>
+        <p className="text-gray-600">{profile.email}</p>
+        <button className="mt-4 px-4 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md">
+          Upload Photo
+        </button>
+      </div>
 
-      <p className="mb-4">{profile.email}</p>
+      <div className="bg-gray-200 shadow rounded-lg p-6 md:col-span-2">
+        <h2 className="text-xl font-bold mb-6 text-gray-700">
+          Personal Details
+        </h2>
 
-      {message && <p className="mb-4 text-green-600">{message}</p>}
+        {message && <p className="mb-4 text-green-600">{message}</p>}
 
-      <div className="flex gap-4">
-        <div className="mb-4">
-          <input
-            type="email"
-            placeholder="New email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            className="w-full mb-2 p-2 border rounded"
-          />
-          <button
-            onClick={handleUpdateEmail}
-            className="w-full bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
-          >
-            Update Email
-          </button>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium">First Name</label>
+            <input
+              name="firstname"
+              value={form.firstname}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">Last Name</label>
+            <input
+              name="lastname"
+              value={form.lastname}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">New Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password ?? ""}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword ?? ""}
+              onChange={handleChange}
+              className="w-full p-2 border rounded"
+            />
+          </div>
         </div>
 
-        <div>
-          <input
-            type="password"
-            placeholder="New password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full mb-2 p-2 border rounded"
-          />
+        <div className="mt-6">
           <button
-            onClick={handleUpdatePassword}
-            className="w-full bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
+            onClick={handleSave}
+            className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
           >
-            Update Password
+            Save Changes
           </button>
         </div>
       </div>
     </div>
   );
-};
-
-export default Profile;
+}
