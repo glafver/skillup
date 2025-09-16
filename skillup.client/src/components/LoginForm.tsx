@@ -3,7 +3,7 @@ import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
+export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
