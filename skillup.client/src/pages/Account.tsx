@@ -46,9 +46,7 @@ export default function AccountPage() {
           onClick={toggleForm}
           className="ms-1 hover:text-cyan-800 transition font-semibold"
         >
-          {isLogin
-            ? "Register"
-            : "Login"}
+          {isLogin ? "Register" : "Login"}
         </button>
       </div>
     </div>
