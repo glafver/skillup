@@ -5,7 +5,7 @@ import AboutSection from "../components/AboutSection";
 
 export default function Home() {
   return (
-    <div className="">
+    <div className="w-full">
       <HeroSection />
       <BenefitsSection />
       <TestimonialsSection />

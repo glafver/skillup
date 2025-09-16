@@ -17,13 +17,13 @@ export function Footer() {
         </div>
 
         <div className="flex justify-center md:justify-end space-x-6 text-sm font-medium">
-          <Link to="/about" className="hover:text-teal-700 transition">
+          <Link to="/about" className="hover:text-cyan-800 transition">
             About
           </Link>
-          <Link to="/contact" className="hover:text-teal-700 transition">
+          <Link to="/contact" className="hover:text-cyan-800 transition">
             Contact
           </Link>
-          <Link to="/faq" className="hover:text-teal-700 transition">
+          <Link to="/faq" className="hover:text-cyan-800 transition">
             FAQ
           </Link>
         </div>
