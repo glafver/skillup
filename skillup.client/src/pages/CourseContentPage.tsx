@@ -75,7 +75,7 @@ export default function CourseContentPage() {
 
             <div className="mt-4 flex items-center justify-end">
               <button
-                className="px-5 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transform transition duration-300 hover:scale-105 shadow-md"
+                className="px-5 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800 transform transition duration-300 hover:scale-105"
                 onClick={() =>
                   navigate(`/quiz/${content.slug}?level=${level.name}`)
                 }
@@ -91,11 +91,11 @@ export default function CourseContentPage() {
 
       <div className="mt-6">
         <button
-          onClick={() => navigate("/")}
-          className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 
-             transition transform hover:scale-105 shadow-sm"
+          onClick={() => navigate("/courses")}
+          className="px-4 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800
+             transition transform hover:scale-105"
         >
-          ⬅ Back
+          ⬅ Back to courses
         </button>
 
       </div>

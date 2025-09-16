@@ -53,7 +53,7 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row rounded-lg text-center p-4 lg:py-0 overflow-hidden bg-gray-100 h-full">
+    <div className="flex flex-col md:flex-row rounded-lg text-center p-4 overflow-hidden bg-gray-100 h-full">
       <div className="flex-shrink-0 self-center">
         <img src={`/${image}`} alt={title} className="w-[150px] h-[150px] p-1 object-cover" />
       </div>
