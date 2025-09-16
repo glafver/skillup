@@ -11,7 +11,8 @@ export default function Profile() {
     password: "",
     confirmPassword: "",
   });
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string | null>(null);
+  const [onError, setOnError] = useState(false);
 
   useEffect(() => {
     profileService.getProfile().then((data) => {
@@ -34,8 +35,10 @@ export default function Profile() {
     try {
       await profileService.updateProfile(form);
       setMessage("Profile updated successfully");
+      setOnError(false);
     } catch {
       setMessage("Failed to update profile");
+      setOnError(true);
     }
   };
 
@@ -63,7 +66,11 @@ export default function Profile() {
           Personal Details
         </h2>
 
-        {message && <p className="mb-4 text-green-600">{message}</p>}
+        {message && (
+          <p className={`mb-4 ${onError ? "text-red-600" : "text-green-600"}`}>
+            {message}
+          </p>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
