@@ -33,9 +33,9 @@ export default function Profile() {
   const handleSave = async () => {
     try {
       await profileService.updateProfile(form);
-      setMessage("Profile updated successfully ✅");
+      setMessage("Profile updated successfully");
     } catch {
-      setMessage("Failed to update profile ❌");
+      setMessage("Failed to update profile");
     }
   };
 
@@ -72,7 +72,7 @@ export default function Profile() {
               name="firstname"
               value={form.firstname}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-white"
             />
           </div>
 
@@ -82,7 +82,7 @@ export default function Profile() {
               name="lastname"
               value={form.lastname}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-white"
             />
           </div>
 
@@ -93,7 +93,7 @@ export default function Profile() {
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-white"
             />
           </div>
 
@@ -104,7 +104,7 @@ export default function Profile() {
               name="password"
               value={form.password ?? ""}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-white"
             />
           </div>
 
@@ -117,7 +117,7 @@ export default function Profile() {
               name="confirmPassword"
               value={form.confirmPassword ?? ""}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-white"
             />
           </div>
         </div>
