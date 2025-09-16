@@ -23,8 +23,8 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6">
-      <h2 className="text-4xl font-bold mb-6 font-family-Roboto text-slate-700 text-center">
+    <div className="w-md mx-auto mt-10 p-6">
+      <h2 className="text-3xl md:text-4xl font-bold mb-6 font-family-Roboto text-slate-700 text-center">
         {isLogin ? "Login" : "Register"}
       </h2>
 

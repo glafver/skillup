@@ -37,8 +37,6 @@ const Quiz: React.FC = () => {
 
     const navigate = useNavigate();
 
-    if (!level) return <p>Level not specified</p>;
-
     const robotImages = Array.from({ length: 20 }, (_, i) => `/quiz/robo-${i + 1}.png`);
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
 
@@ -83,7 +81,12 @@ const Quiz: React.FC = () => {
         }
     };
 
-    if (questions.length === 0) return <p>Loading quiz...</p>;
+    if (questions.length === 0)
+        return (
+            <div className="flex items-center justify-center mx-auto">
+                <p className="text-3xl text-cyan-700">Loading quiz...</p>
+            </div>
+        );
 
     const progress = ((currentIndex + 1) / questions.length) * 100;
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
 
-type Props = { title: string; description: string; image: string; slug: string };
+type Props = { title: string; description: string; image: string; slug: string; };
 
 export const CourseCard = ({ title, description, image, slug }: Props) => {
   const navigate = useNavigate();
@@ -53,8 +53,8 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
   };
 
   return (
-    <div className="flex rounded overflow-hidden bg-gray-100">
-      <div className="flex-shrink-0">
+    <div className="flex flex-col md:flex-row rounded-lg text-center p-4 lg:py-0 overflow-hidden bg-gray-100 h-full">
+      <div className="flex-shrink-0 self-center">
         <img src={`/${image}`} alt={title} className="w-[150px] h-[150px] p-1 object-cover" />
       </div>
 
@@ -65,7 +65,7 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
 
       <button
         onClick={handleClick}
-        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-cyan-700 text-white hover:bg-teal-700 transition transform hover:scale-105"
+        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
       >
         {active ? "Resume" : "Start Course"}
       </button>
