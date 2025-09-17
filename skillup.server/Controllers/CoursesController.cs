@@ -84,5 +84,17 @@ namespace skillup.server.Controllers
             return Ok(new { active = isActive });
         }
 
+        [HttpGet("active")]
+        [Authorize]
+        public async Task<IActionResult> GetUserActiveCourses()
+        {
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
+
+            var activeCourses = await _service.GetUserActiveCoursesWithDetailsAsync(userId);
+            return Ok(activeCourses);
+        }
+
+
     }
 }
