@@ -83,4 +83,19 @@ namespace skillup.server.Services
                 .AnyAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
         }
     }
+
+
+
+    public class ActiveCourseDto
+    {
+        public string Id { get; set; } = string.Empty;
+        public string CourseSlug { get; set; } = string.Empty;
+        public DateTime StartedAt { get; set; }
+        public string CurrentLevel { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+    }
 }
