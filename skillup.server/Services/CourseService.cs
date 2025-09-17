@@ -82,9 +82,45 @@ namespace skillup.server.Services
             return await _dbContext.ActiveCourses
                 .AnyAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
         }
+
+        public async Task<List<ActiveCourseDto>> GetUserActiveCoursesWithDetailsAsync(string userId)
+        {
+            var active = await _dbContext.ActiveCourses
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.StartedAt)
+                .ToListAsync();
+
+            if (active.Count == 0) return new List<ActiveCourseDto>();
+
+            var slugs = active.Select(a => a.CourseSlug).Distinct().ToList();
+
+            var courses = await _dbContext.Courses
+                .Where(c => slugs.Contains(c.Slug))
+                .ToListAsync();
+
+            var bySlug = courses.ToDictionary(c => c.Slug, c => c);
+
+            var result = new List<ActiveCourseDto>(active.Count);
+            foreach (var a in active)
+            {
+                bySlug.TryGetValue(a.CourseSlug, out var course);
+
+                result.Add(new ActiveCourseDto
+                {
+                    Id           = a.Id,
+                    CourseSlug   = a.CourseSlug,
+                    StartedAt    = a.StartedAt,
+                    CurrentLevel = a.CurrentLevel.ToString(), 
+                    Status       = a.Status.ToString(),
+                    Title        = course?.Title ?? "",
+                    Description  = course?.Description ?? "",
+                    Image        = course?.Image ?? ""
+                });
+            }
+
+            return result;
+        }
     }
-
-
 
     public class ActiveCourseDto
     {
@@ -98,4 +134,5 @@ namespace skillup.server.Services
         public string Description { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
     }
+
 }
