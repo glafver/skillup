@@ -63,7 +63,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="px-4 py-2 bg-none text-cyan-700 hover:text-cyan-800 text-sm rounded-md"
+          className="bg-none text-cyan-700 hover:text-cyan-800 text-sm rounded-md"
         >
           Choose Avatar
         </button>
