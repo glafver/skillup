@@ -177,7 +177,7 @@ export default function Profile() {
         {loading && <p className="text-gray-500">Loading…</p>}
         {error && <p className="text-red-600">Error: {error}</p>}
         {!loading && !error && courses?.length === 0 && (
-          <p className="text-gray-500">No active courses.</p>
+          <p className="text-gray-700">No active courses.</p>
         )}
 
         <ul className="space-y-3">
@@ -192,14 +192,11 @@ export default function Profile() {
               </div>
               <div className="flex-grow p-3">
                 <h3 className="font-semibold">{c.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-2">
-                  {c.description}
-                </p>
-                <div className="mt-2 text-xs text-gray-500 space-x-3">
+                <div className="mt-2 text-xs text-gray-600 space-x-3">
                   <span>Level: {c.currentLevel}</span>
                   <span>Status: {c.status}</span>
                   <span>
-                    Started: {new Date(c.startedAt).toLocaleString("sv-SE")}
+                    Started: {new Date(c.startedAt).toISOString().split("T")[0]}
                   </span>
                   <span>
                     {c.currentLevel === "Beginner" &&
