@@ -138,6 +138,15 @@ export default function Profile() {
           </button>
         </div>
       </div>
+      <div className="p-4">
+        <h2 className="text-xl font-bold mb-4">Active Courses</h2>
+        <ul>
+          <li className="mb-2 p-4 bg-gray-200 rounded shadow">
+            {" "}
+            Course 1: Introduction to React
+          </li>
+        </ul>
+      </div>
     </div>
   );
 }
