@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
-import type { Profile, UpdateProfileRequest } from "../services/profileService";
+import type {
+  Profile,
+  UpdateProfileRequest,
+  ActiveCourse,
+} from "../services/profileService";
 import profileService from "../services/profileService";
 import AvatarSection from "../components/AvatarSection";
+import { authService } from "../services/authService";
 
 export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -10,7 +15,7 @@ export default function Profile() {
     lastname: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
   const [message, setMessage] = useState<string | null>(null);
   const [onError, setOnError] = useState(false);
@@ -23,7 +28,7 @@ export default function Profile() {
         lastname: data.lastname,
         email: data.email,
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
       });
     });
   }, []);
@@ -59,6 +64,31 @@ export default function Profile() {
       setOnError(true);
     }
   };
+  // Fetch active courses
+  const [courses, setCourses] = useState<ActiveCourse[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const API = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${API}/api/courses/active`, {
+          headers: { Authorization: `Bearer ${authService.getToken()}` },
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const json: ActiveCourse[] = await res.json();
+        setCourses(json);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, [API]);
 
   if (!profile) return <p>Loading...</p>;
 
@@ -142,13 +172,44 @@ export default function Profile() {
           </button>
         </div>
       </div>
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-4">Active Courses</h2>
-        <ul>
-          <li className="mb-2 p-4 bg-gray-200 rounded shadow">
-            {" "}
-            Course 1: Introduction to React
-          </li>
+      <div className="bg-gray-200 shadow rounded-lg p-6 mb-5 md:col-span-3">
+        <h2 className="text-xl font-semibold mb-2">Active courses</h2>
+        {loading && <p className="text-gray-500">Loading…</p>}
+        {error && <p className="text-red-600">Error: {error}</p>}
+        {!loading && !error && courses?.length === 0 && (
+          <p className="text-gray-700">No active courses.</p>
+        )}
+
+        <ul className="space-y-3">
+          {courses?.map((c) => (
+            <li key={c.id} className="flex rounded overflow-hidden bg-gray-100">
+              <div className="flex-shrink-0">
+                <img
+                  src={`/${c.image}`}
+                  alt={c.title}
+                  className="w-[96px] h-[96px] p-1 object-cover bg-white"
+                />
+              </div>
+              <div className="flex-grow p-3">
+                <h3 className="font-semibold">{c.title}</h3>
+                <div className="mt-2 text-xs text-gray-600 space-x-3">
+                  <span>Level: {c.currentLevel}</span>
+                  <span>Status: {c.status}</span>
+                  <span>
+                    Started: {new Date(c.startedAt).toISOString().split("T")[0]}
+                  </span>
+                  <span>
+                    {c.currentLevel === "Beginner" &&
+                      c.status === "completed" && (
+                        <button className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md">
+                          Get Certificate
+                        </button>
+                      )}
+                  </span>
+                </div>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

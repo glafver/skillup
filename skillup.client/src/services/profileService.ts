@@ -4,6 +4,16 @@ export interface Profile {
   email: string;
   avatar?: string;
 }
+export interface ActiveCourse {
+  id: string;
+  courseSlug: string;
+  startedAt: string;
+  currentLevel: string;
+  status: string;
+  title: string;
+  description: string;
+  image: string;
+};
 
 export interface UpdateProfileRequest {
   firstname: string;
