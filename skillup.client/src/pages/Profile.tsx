@@ -138,11 +138,10 @@ export default function Profile() {
           </button>
         </div>
       </div>
-      <div className="p-4">
+      <div className="bg-gray-200 shadow rounded-lg p-6 mb-5 md:col-span-3">
         <h2 className="text-xl font-bold mb-4">Active Courses</h2>
         <ul>
-          <li className="mb-2 p-4 bg-gray-200 rounded shadow">
-            {" "}
+          <li className="mb-2 p-4 bg-gray-200">
             Course 1: Introduction to React
           </li>
         </ul>
