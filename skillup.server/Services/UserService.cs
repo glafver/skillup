@@ -64,6 +64,11 @@ namespace skillup.server.Services
                 existingUser.PasswordHash = user.PasswordHash;
             }
 
+            if (!string.IsNullOrEmpty(user.Avatar))
+            {
+                existingUser.Avatar = user.Avatar;
+            }
+
             _context.Users.Update(existingUser);
             await _context.SaveChangesAsync();
             return true;

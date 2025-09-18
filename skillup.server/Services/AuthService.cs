@@ -23,7 +23,7 @@ namespace skillup.server.Services
             _passwordHasher = new PasswordHasher<User>();
         }
 
-        public async Task<User?> RegisterAsync(string firstname, string lastname, string email, string password)
+        public async Task<User?> RegisterAsync(string firstname, string lastname, string email, string password, string avatar)
         {
             var existing = await _userService.GetByEmailAsync(email);
             if (existing != null) return null;
@@ -32,7 +32,8 @@ namespace skillup.server.Services
             {
                 Firstname = firstname,
                 Lastname = lastname,
-                Email = email
+                Email = email,
+                Avatar = avatar
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(user, password);

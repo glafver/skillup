@@ -14,6 +14,7 @@ namespace skillup.server.Controllers
         public string Email { get; set; } = string.Empty;
         public string? Password { get; set; }
         public string? ConfirmPassword { get; set; }
+        public string? Avatar { get; set; }
     }
 
     [ApiController]
@@ -43,7 +44,8 @@ namespace skillup.server.Controllers
             {
                 user.Firstname,
                 user.Lastname,
-                user.Email
+                user.Email,
+                user.Avatar
             });
         }
 
@@ -67,6 +69,11 @@ namespace skillup.server.Controllers
                     return BadRequest(new { message = "Passwords do not match." });
 
                 user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+            }
+
+            if (!string.IsNullOrEmpty(request.Avatar))
+            {
+                user.Avatar = request.Avatar;
             }
 
             var result = await _userService.UpdateAsync(user);

@@ -2,6 +2,7 @@ export interface Profile {
   firstname: string;
   lastname: string;
   email: string;
+  avatar?: string;
 }
 
 export interface UpdateProfileRequest {
@@ -10,9 +11,11 @@ export interface UpdateProfileRequest {
   email: string;
   password?: string | null;
   confirmPassword?: string | null;
+  avatar?: string;
 }
 
-const API_URL = "http://localhost:5178/api/profile";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
+const API_URL = `${BASE_URL}/api/profile`;
 
 const getToken = () => {
   const token = localStorage.getItem("token");
