@@ -37,7 +37,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto bg-gray-200 p-8 rounded-xl shadow space-y-4"
+      className="max-w-md mx-auto bg-gray-200 p-8 rounded-lg shadow space-y-4"
     >
       {error && <p className="text-red-500 mb-2">{error}</p>}
       {success && (
@@ -52,7 +52,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
           value={firstname}
           onChange={(e) => setFirstname(e.target.value)}
           required
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 
@@ -64,7 +64,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
           value={lastname}
           onChange={(e) => setLastname(e.target.value)}
           required
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 
@@ -76,7 +76,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 
@@ -89,7 +89,7 @@ export const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 

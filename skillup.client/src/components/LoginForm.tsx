@@ -3,7 +3,7 @@ import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
-export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
+export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,7 +31,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-md mx-auto bg-gray-200 p-8 rounded-xl shadow space-y-4"
+      className="max-w-md mx-auto bg-gray-200 p-8 rounded-lg shadow space-y-4"
     >
       {successMessage && (
         <p className="text-green-500 mb-2">{successMessage}</p>
@@ -47,7 +47,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 
@@ -60,7 +60,7 @@ export const LoginForm = ({ successMessage }: { successMessage?: string }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
           autoComplete="current-password"
-          className="w-full text-sm bg-white px-4 py-2 rounded-md"
+          className="w-full text-sm bg-white px-4 border py-2 rounded-md"
         />
       </div>
 

@@ -17,13 +17,13 @@ const Contact = () => {
             </div>
 
             <div className="grid md:grid-cols-2 gap-12 md:gap-24 max-w-4xl mx-auto">
-                <form className="bg-gray-200 p-8 rounded-xl shadow space-y-4">
+                <form className="bg-gray-200 p-8 rounded-lg shadow space-y-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">Name</label>
                         <input
                             type="text"
                             placeholder="Your Name"
-                            className="w-full text-sm bg-white rounded-md px-4 py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
+                            className="w-full text-sm bg-white rounded-md px-4 border py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
                         />
                     </div>
                     <div>
@@ -31,7 +31,7 @@ const Contact = () => {
                         <input
                             type="email"
                             placeholder="Your Email"
-                            className="w-full text-sm bg-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
+                            className="w-full text-sm bg-white rounded-md px-4 border py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
                         />
                     </div>
                     <div>
@@ -39,7 +39,7 @@ const Contact = () => {
                         <textarea
                             rows={4}
                             placeholder="Your Message"
-                            className="w-full text-sm bg-white rounded-lg px-4 py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
+                            className="w-full text-sm bg-white rounded-md px-4 border py-2 focus:outline-none focus:ring-1 focus:ring-cyan-700"
                         ></textarea>
                     </div>
                     <button
