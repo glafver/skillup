@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import TestActiveCourses from "./pages/TestActiveCourses";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/courses/:slug" element={<CourseContentPage />} />
           <Route path="/quiz/:slug" element={<Quiz />} />
           <Route path="/quiz/:slug/results" element={<Results />} />
+          <Route path="/test/active-courses" element={<TestActiveCourses />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
