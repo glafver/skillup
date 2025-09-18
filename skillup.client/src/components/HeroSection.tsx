@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
     return (
-        <section className="container mx-auto">
+        <section className="container mx-auto mt-12">
             <div className="container mx-auto flex flex-col md:flex-row items-center">
 
                 <div className="w-full md:w-1/2 text-center px-10 pb-8">

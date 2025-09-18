@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Profile, UpdateProfileRequest } from "../services/profileService";
 import profileService from "../services/profileService";
+import AvatarSection from "../components/AvatarSection";
 
 export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -9,7 +10,7 @@ export default function Profile() {
     lastname: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
   const [message, setMessage] = useState<string | null>(null);
   const [onError, setOnError] = useState(false);
@@ -22,13 +23,30 @@ export default function Profile() {
         lastname: data.lastname,
         email: data.email,
         password: "",
-        confirmPassword: "",
+        confirmPassword: ""
       });
     });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdateAvatar = async (url: string) => {
+    if (!profile) return;
+
+    try {
+      await profileService.updateProfile({
+        firstname: profile.firstname,
+        lastname: profile.lastname,
+        email: profile.email,
+        avatar: url,
+      });
+
+      setProfile({ ...profile, avatar: url });
+    } catch {
+      console.error("Failed to update avatar");
+    }
   };
 
   const handleSave = async () => {
@@ -46,21 +64,7 @@ export default function Profile() {
 
   return (
     <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="bg-gray-200 shadow rounded-lg p-6 flex flex-col items-center">
-        <img
-          src="https://cdn-icons-png.freepik.com/512/6997/6997484.png"
-          alt="UserAvatar"
-          className="w-24 h-24 rounded-full mb-4"
-        />
-        <h3 className="text-lg font-semibold">
-          {profile.firstname} {profile.lastname}
-        </h3>
-        <p className="text-gray-600">{profile.email}</p>
-        <button className="mt-4 px-4 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md">
-          Upload Photo
-        </button>
-      </div>
-
+      <AvatarSection profile={profile} onUpdateAvatar={handleUpdateAvatar} />
       <div className="bg-gray-200 shadow rounded-lg p-6 md:col-span-2">
         <h2 className="text-xl font-bold mb-6 text-gray-700">
           Personal Details

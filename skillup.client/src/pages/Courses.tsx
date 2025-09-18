@@ -27,14 +27,19 @@ export default function Courses() {
             });
     }, []);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading)
+        return (
+            <div className="flex items-center justify-center mx-auto">
+                <p className="text-3xl text-cyan-700">Loading...</p>
+            </div>
+        );
 
     return (
-        <div className="container mx-auto">
-            <h1 className="text-2xl mb-4 text-center">Courses Page</h1>
+        <div className="container mx-auto px-12 xl:px-12 py-12">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Courses Page</h1>
 
             <div className="max-w-8xl mx-auto space-y-4">
-                <ul className="grid grid-cols-2 gap-8">
+                <ul className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     {courses.map((course, idx) => (
                         <li key={idx}>
                             <CourseCard
