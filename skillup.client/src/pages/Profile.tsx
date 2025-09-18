@@ -192,20 +192,20 @@ export default function Profile() {
               </div>
               <div className="flex-grow p-3">
                 <h3 className="font-semibold">{c.title}</h3>
-                <div className="mt-2 text-xs text-gray-600 space-x-3">
-                  <span>Level: {c.currentLevel}</span>
-                  <span>Status: {c.status}</span>
-                  <span>
-                    Started: {new Date(c.startedAt).toISOString().split("T")[0]}
-                  </span>
-                  <span>
-                    {c.currentLevel === "Beginner" &&
-                      c.status === "completed" && (
-                        <button className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md">
-                          Get Certificate
-                        </button>
-                      )}
-                  </span>
+
+                <div className="mt-2 text-xs text-gray-600 flex items-center">
+                  <div className="flex space-x-3">
+                    <span>Level: {c.currentLevel}</span>
+                    <span>
+                      Started:{" "}
+                      {new Date(c.startedAt).toISOString().split("T")[0]}
+                    </span>
+                  </div>
+                  {c.currentLevel === "Beginner" && c.status === "Active" && (
+                    <button className="ml-auto mr-1 px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md">
+                      Get Certificate
+                    </button>
+                  )}
                 </div>
               </div>
             </li>
