@@ -4,8 +4,7 @@ namespace skillup.server.Models
     using MongoDB.Bson;
     public class User
     {
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        
         public ObjectId Id { get; set; }
         
         [Required(ErrorMessage = "Firstname is required")]
@@ -16,5 +15,6 @@ namespace skillup.server.Models
         public string Email { get; set; } = string.Empty;
         [Required(ErrorMessage = "Password is required")]
         public string PasswordHash { get; set; } = string.Empty;
+        public string? Avatar { get; set; }
     }
 }

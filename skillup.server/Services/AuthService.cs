@@ -23,7 +23,7 @@ namespace skillup.server.Services
             _passwordHasher = new PasswordHasher<User>();
         }
 
-        public async Task<User?> RegisterAsync(string firstname, string lastname, string email, string password)
+        public async Task<User?> RegisterAsync(string firstname, string lastname, string email, string password, string avatar)
         {
             var existing = await _userService.GetByEmailAsync(email);
             if (existing != null) return null;
@@ -32,7 +32,8 @@ namespace skillup.server.Services
             {
                 Firstname = firstname,
                 Lastname = lastname,
-                Email = email
+                Email = email,
+                Avatar = avatar
             };
             
             user.PasswordHash = _passwordHasher.HashPassword(user, password);
@@ -55,7 +56,7 @@ namespace skillup.server.Services
         private string GenerateJwtToken(User user)
         {
             var keyString = _configuration["Jwt:Key"]
-        ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
+                ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
 
             var issuer = _configuration["Jwt:Issuer"]
                 ?? throw new InvalidOperationException("Jwt:Issuer is missing in configuration");
@@ -74,9 +75,10 @@ namespace skillup.server.Services
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -88,7 +90,7 @@ namespace skillup.server.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        
         }
+
     }
 }

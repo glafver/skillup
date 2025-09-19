@@ -4,7 +4,8 @@ using skillup.server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using MongoDB.Bson;
+using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace skillup.server
 {
@@ -39,9 +40,12 @@ namespace skillup.server
             builder.Services.AddDbContext<SkillupDbContext>(options =>
                 options.UseMongoDB(mongoDBSettings.ConnectionString, mongoDBSettings.DatabaseName));
 
+            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddSingleton<CourseContentService>();
+            builder.Services.AddScoped<IQuizService, QuizService>();
 
             //JWT
             var key = builder.Configuration["Jwt:Key"]
@@ -66,7 +70,8 @@ namespace skillup.server
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+                    NameClaimType = JwtRegisteredClaimNames.Sub // "sub" i token till .NameIdentifier
                 };
             });
 

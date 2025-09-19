@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const FAQItem = ({ question, answer }: { question: string; answer: string; }) => {
     const [open, setOpen] = useState(false);
@@ -64,7 +65,12 @@ const FAQ = () => {
     ];
 
     return (
-        <section className="container mx-auto px-6 py-12">
+        <motion.section
+            className="container mx-auto px-6 py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+        >
             <div className="text-center max-w-2xl mx-auto mb-12">
                 <h1 className="text-3xl md:text-4xl font-bold mb-6">Frequently Asked Questions</h1>
                 <p className="text-md">
@@ -77,7 +83,7 @@ const FAQ = () => {
                     <FAQItem key={index} question={item.question} answer={item.answer} />
                 ))}
             </div>
-        </section>
+        </motion.section>
     );
 };
 

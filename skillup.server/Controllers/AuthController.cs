@@ -19,7 +19,7 @@ namespace skillup.server.Controllers
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var user = await _authService.RegisterAsync(
-                request.Firstname, request.Lastname, request.Email, request.Password);
+                request.Firstname, request.Lastname, request.Email, request.Password, request.Avatar);
 
             if (user == null)
                 return BadRequest(new { message = "Email is already in use." });
@@ -29,7 +29,8 @@ namespace skillup.server.Controllers
                 user.Id,
                 user.Firstname,
                 user.Lastname,
-                user.Email
+                user.Email,
+                user.Avatar
             });
         }
 
@@ -45,6 +46,6 @@ namespace skillup.server.Controllers
         }
     }
 
-    public record RegisterRequest(string Firstname, string Lastname, string Email, string Password);
+    public record RegisterRequest(string Firstname, string Lastname, string Email, string Password, string Avatar);
     public record LoginRequest(string Email, string Password);
 }

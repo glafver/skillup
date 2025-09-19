@@ -7,26 +7,42 @@ namespace skillup.server.Services
         
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Course> Courses { get; set; }
+        public DbSet<ActiveCourse> ActiveCourses { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; } = null!;
 
         public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.Property(u => u.Id)
+                    .HasConversion(
+                        id => id.ToString(),// MongoDB ObjectId till string när det sparas
+                            value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
+                        );
+            });
+
+            modelBuilder.Entity<Course>(entity =>
+            {
+                entity.HasIndex(c => c.Title).IsUnique();
+            });
             
+            modelBuilder.Entity<ActiveCourse>(e =>
+            {
+                e.HasIndex(x => new { x.UserId, x.CourseSlug }).IsUnique();
+            });
 
-                modelBuilder.Entity<User>(entity =>
+
+                modelBuilder.Entity<Quiz>(entity =>
                 {
-                    entity.HasIndex(u => u.Email).IsUnique();
-                });
-
-                modelBuilder.Entity<Course>(entity =>
-                {
-
-                    entity.HasIndex(c => c.Title).IsUnique();
-                    
+                    entity.Property(q => q.Id)
+                          .HasConversion(
+                              id => id.ToString(),
+                              value => MongoDB.Bson.ObjectId.Parse(value)
+                          );
                 });
 
             base.OnModelCreating(modelBuilder);

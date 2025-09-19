@@ -23,8 +23,8 @@ export default function AccountPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 md:border rounded-md md:shadow">
-      <h2 className="text-2xl font-bold mb-4 font-family-Roboto text-slate-700 text-center">
+    <div className="w-md mx-auto mt-10 p-6">
+      <h2 className="text-3xl md:text-4xl font-bold mb-6 font-family-Roboto text-slate-700 text-center">
         {isLogin ? "Login" : "Register"}
       </h2>
 
@@ -38,17 +38,15 @@ export default function AccountPage() {
           }}
         />
       )}
-      <div className="text-sm mt-4 px-4">
+      <div className="text-sm mt-4 ">
         {isLogin
           ? "Don't have an account?"
           : "Already have an account?"}
         <button
           onClick={toggleForm}
-          className="ms-1 hover:text-teal-700 transition font-semibold"
+          className="ms-1 hover:text-cyan-800 transition font-semibold"
         >
-          {isLogin
-            ? "Register"
-            : "Login"}
+          {isLogin ? "Register" : "Login"}
         </button>
       </div>
     </div>

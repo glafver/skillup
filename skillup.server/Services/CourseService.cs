@@ -18,13 +18,13 @@ namespace skillup.server.Services
 
         public async Task<Course?> GetCourseByIdAsync(string id)
         {
-            return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == id);
+             return await _dbContext.Courses.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Course> AddCourseAsync(Course course)
         {
-            course.Title = course.Title?.Trim();
-            course.Description = course.Description?.Trim();
+            course.Title = course.Title.Trim();
+            course.Description = course.Description.Trim();
 
             try
             {
@@ -44,12 +44,95 @@ namespace skillup.server.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCourseAsync(string id)
+        public async Task<bool> DeleteCourseAsync(string id)
         {
             var course = await GetCourseByIdAsync(id);
-            if (course is null) return;
+            if (course is null) return false;
+
             _dbContext.Courses.Remove(course);
             await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        // Lägg till kurs till användarens aktiva kurser
+        public async Task<ActiveCourse> AddActiveCourseAsync(string userId, string courseSlug)
+        {
+            var existing = await _dbContext.ActiveCourses
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+
+            if (existing != null) return existing;
+
+            var activeCourse = new ActiveCourse
+            {
+                Id = ObjectId.GenerateNewId().ToString(),
+                UserId = userId,
+                CourseSlug = courseSlug,
+                StartedAt = DateTime.UtcNow,
+                CurrentLevel = LevelCode.Beginner,
+                Status = ActiveCourseStatus.Active
+            };
+
+            _dbContext.ActiveCourses.Add(activeCourse);
+            await _dbContext.SaveChangesAsync();
+            return activeCourse;
+        }
+
+        public async Task<bool> IsCourseActiveAsync(string userId, string courseSlug)
+        {
+            return await _dbContext.ActiveCourses
+                .AnyAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+        }
+
+        public async Task<List<ActiveCourseDto>> GetUserActiveCoursesWithDetailsAsync(string userId)
+        {
+            var active = await _dbContext.ActiveCourses
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.StartedAt)
+                .ToListAsync();
+
+            if (active.Count == 0) return new List<ActiveCourseDto>();
+
+            var slugs = active.Select(a => a.CourseSlug).Distinct().ToList();
+
+            var courses = await _dbContext.Courses
+                .Where(c => slugs.Contains(c.Slug))
+                .ToListAsync();
+
+            var bySlug = courses.ToDictionary(c => c.Slug, c => c);
+
+            var result = new List<ActiveCourseDto>(active.Count);
+            foreach (var a in active)
+            {
+                bySlug.TryGetValue(a.CourseSlug, out var course);
+
+                result.Add(new ActiveCourseDto
+                {
+                    Id           = a.Id,
+                    CourseSlug   = a.CourseSlug,
+                    StartedAt    = a.StartedAt,
+                    CurrentLevel = a.CurrentLevel.ToString(), 
+                    Status       = a.Status.ToString(),
+                    Title        = course?.Title ?? "",
+                    Description  = course?.Description ?? "",
+                    Image        = course?.Image ?? ""
+                });
+            }
+
+            return result;
         }
     }
+
+    public class ActiveCourseDto
+    {
+        public string Id { get; set; } = string.Empty;
+        public string CourseSlug { get; set; } = string.Empty;
+        public DateTime StartedAt { get; set; }
+        public string CurrentLevel { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+    }
+
 }
