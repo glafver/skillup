@@ -6,12 +6,6 @@ import LevelAccordion from "../components/LevelAccordion";
 export default function CourseContentPage() {
   const { slug } = useParams<{ slug: string; }>();
   const navigate = useNavigate();
-  const quizSlugMap: Record<string, string> = {
-    javascript: "js",
-    csharp: "csharp",
-    python: "python",
-    html: "html",
-  };
   const [content, setContent] = useState<CourseContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
