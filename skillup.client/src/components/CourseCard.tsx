@@ -7,6 +7,7 @@ type Props = { title: string; description: string; image: string; slug: string; 
 export const CourseCard = ({ title, description, image, slug }: Props) => {
   const navigate = useNavigate();
   const [active, setActive] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const API = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
@@ -17,16 +18,24 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
       });
       if (res.ok) {
         const data = await res.json();
+        if (data.status) {
+          setCompleted(data?.status?.isCompleted);
+        }
         setActive(Boolean(data.active));
       }
     };
     fetchStatus();
+
   }, [slug, API]);
 
   const handleClick = async () => {
     if (!authService.isLoggedIn()) {
       alert("Please log in to start the course.");
       navigate("/account");
+      return;
+    }
+    if (completed) {
+      navigate(`/certificates`);
       return;
     }
 
@@ -67,7 +76,12 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
         onClick={handleClick}
         className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
       >
-        {active ? "Resume" : "Start Course"}
+        {completed
+          ? "Get Certificate"
+          : active
+            ? "Resume"
+            : "Start Course"
+        }
       </button>
     </div>
   );

@@ -35,20 +35,25 @@ export default function Results() {
         { question: string; userAnswer: string; correctAnswer: string; }[]
     >([]);
     const [showModal, setShowModal] = useState(false);
+    const [nextLevel, setNextLevel] = useState<string | null>(null);
+    const [completed, setCompleted] = useState(false);
 
-    const updateUserLevel = async (slug: string, level: string) => {
-        // Here we should call endpoint to update users level
-
-        // try {
-        //     const res = await fetch(`${BASE_URL}/api/users/update-level`, {  <------ Something like this
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({ slug, level }),
-        //     });
-        //     if (!res.ok) throw new Error("Failed to update user progress");
-        // } catch (err) {
-        //     console.error("Error updating user level:", err);
-        // }
+    const updateUserLevel = async (slug: string) => {
+        try {
+            const res = await fetch(`${BASE_URL}/api/courses/${slug}/advance`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${authService.getToken()}`
+                }
+            });
+            if (!res.ok) throw new Error("Failed to advance course");
+            const data = await res.json();
+            setNextLevel(data.updatedCourse.currentLevel);
+            setCompleted(!!data.updatedCourse.completedAt);
+        } catch (err) {
+            console.error("Error updating user level:", err);
+        }
     };
 
     useEffect(() => {
@@ -82,39 +87,27 @@ export default function Results() {
         };
 
         loadResults();
+
     }, [slug, level, BASE_URL]);
 
-    const correctCount = results.filter(
-        (r) => r.userAnswer === r.correctAnswer
-    ).length;
-
-    const percentage = results.length
-        ? Math.round((correctCount / results.length) * 100)
-        : 0;
-
-    const unlocked = percentage >= 80;
+    const correctCount = results.filter(r => r.userAnswer === r.correctAnswer).length;
+    const percentage = results.length ? Math.round((correctCount / results.length) * 100) : 0;
+    const unlocked = percentage >= 50;
 
     useEffect(() => {
-        if (unlocked && slug && level) {
+        if (unlocked && slug) {
+            updateUserLevel(slug);
+        }
+    }, [unlocked, slug]);
+
+    useEffect(() => {
+        if (completed) {
             setShowModal(true);
-            updateUserLevel(slug, level);
         }
-    }, [unlocked, slug, level]);
-
-    const handleButtonClick = () => {
-        if (unlocked) {
-            // Here we should have the logic to get a name of a new level and navigate to it
-
-            // const nextLevel = "Advanced"; ----> need to get next level somehow
-            // navigate(`/quiz/${slug}?level=${nextLevel}`);
-        } else {
-            navigate(`/quiz/${slug}?level=${level}`);
-        }
-    };
+    }, [completed]);
 
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6">
-
             <AnimatePresence>
                 {showModal && (
                     <motion.div
@@ -130,32 +123,48 @@ export default function Results() {
                             transition={{ duration: 0.3 }}
                         >
                             <h2 className="text-2xl font-bold mb-4 text-center ">
-                                🎉 Congratulations, you did it! 🎉
+                                🎉 Congratulations 🎉 <br /> You completed the course!
                             </h2>
                             <p className="mb-4 text-center text-lg">
-                                New level unlocked — one step closer to your certificate! 🏆
+                                You have successfully finished all levels. Get your certificate! 🏆
                             </p>
-                            <button className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
-                                onClick={() => setShowModal(false)}>
+
+                            <button
+                                className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
+                                onClick={() => setShowModal(false)}
+                            >
                                 View Your Results
                             </button>
-
                         </motion.div>
                         <Confetti
                             recycle={showModal}
                             numberOfPieces={300}
                             className="-z-10"
-                            colors={["#F87171", "#34D399", "#60A5FA", "#FBBF24", "#A78BFA"]} />
+                            colors={["#F87171", "#34D399", "#60A5FA", "#FBBF24", "#A78BFA"]}
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>
 
             <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">
-                Quiz Results</h1>
+                Quiz Results
+            </h1>
 
             {results.length > 0 && (
                 <p className="text-center mb-4 text-lg font-semibold">
-                    You got {correctCount}/{results.length} correct{" "}
+                    You got {correctCount}/{results.length} correct
+                </p>
+            )}
+
+            {unlocked && !completed && (
+                <p className="mb-4 text-center text-lg">
+                    New level {nextLevel} unlocked — one step closer to your certificate! 🏆
+                </p>
+            )}
+
+            {completed && (
+                <p className="mb-4 text-center text-lg">
+                    You have successfully finished all levels. Get your certificate! 🏆
                 </p>
             )}
 
@@ -186,13 +195,38 @@ export default function Results() {
                         </tbody>
                     </table>
 
-                    <div className="text-center mt-4 mb-8">
-                        <button
-                            onClick={handleButtonClick}
-                            className={`px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800`}
-                        >
-                            {unlocked ? "Next Level" : "Retry Quiz"}
-                        </button>
+                    <div className="text-center mt-4 mb-8 flex flex-col md:flex-row justify-center gap-4">
+                        {completed ? (
+                            <button
+                                onClick={() => navigate(`/certificate/${slug}`)}
+                                className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
+                            >
+                                Get Certificate
+                            </button>
+                        ) :
+                            unlocked ? (
+                                <button
+                                    onClick={() => navigate(`/courses/${slug}`)}
+                                    className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
+                                >
+                                    Next Level
+                                </button>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={() => navigate(`/courses/${slug}`)}
+                                        className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-white text-cyan-700 border border-cyan-700 hover:bg-cyan-700 hover:text-white"
+                                    >
+                                        Read Theory
+                                    </button>
+                                    <button
+                                        onClick={() => navigate(`/quiz/${slug}?level=${level}`)}
+                                        className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
+                                    >
+                                        Retry Quiz
+                                    </button>
+                                </>
+                            )}
                     </div>
                 </>
             ) : (

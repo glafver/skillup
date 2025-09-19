@@ -12,7 +12,8 @@ namespace skillup.server.Services
         Task UpdateCourseAsync(Course course);
         Task<bool> DeleteCourseAsync(string id);
         Task<ActiveCourse> AddActiveCourseAsync(string userId, string courseSlug);
-        Task<bool> IsCourseActiveAsync(string userId, string courseSlug);
+        Task<ActiveCourse> AdvanceActiveCourseAsync(string userId, string courseSlug);
+        Task<object?> GetCourseStatusAsync(string userId, string courseSlug);
         Task<List<ActiveCourseDto>> GetUserActiveCoursesWithDetailsAsync(string userId);
 
     }

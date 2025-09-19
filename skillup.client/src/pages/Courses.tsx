@@ -30,7 +30,7 @@ export default function Courses() {
     if (loading)
         return (
             <div className="flex items-center justify-center mx-auto">
-                <p className="text-3xl text-cyan-700">Loading...</p>
+                <p className="text-xl ">Loading...</p>
             </div>
         );
 

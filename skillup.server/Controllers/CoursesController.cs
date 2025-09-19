@@ -80,8 +80,10 @@ namespace skillup.server.Controllers
             var userId = User.GetUserId();
             if (userId is null) return Unauthorized();
 
-            var isActive = await _service.IsCourseActiveAsync(userId, slug);
-            return Ok(new { active = isActive });
+            var status = await _service.GetCourseStatusAsync(userId, slug);
+            if (status == null) return Ok(new { active = false, slug });
+
+            return Ok(new { active = true, status, slug });
         }
 
         [HttpGet("active")]
@@ -95,6 +97,23 @@ namespace skillup.server.Controllers
             return Ok(activeCourses);
         }
 
+        [HttpPost("{slug}/advance")]
+        [Authorize]
+        public async Task<IActionResult> AdvanceCourse(string slug)
+        {
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
 
+            try
+            {
+                var updatedCourse = await _service.AdvanceActiveCourseAsync(userId, slug);
+                var levelName = updatedCourse.CurrentLevel.ToString();
+                return Ok(new { message = "Course advanced!", updatedCourse, level = levelName });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

@@ -18,6 +18,8 @@ export default function CourseContentPage() {
   useEffect(() => {
     if (!slug) return;
 
+    localStorage.removeItem("quizAnswers");
+
     setLoading(true);
     setError(null);
 
