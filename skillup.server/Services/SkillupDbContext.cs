@@ -10,6 +10,7 @@ namespace skillup.server.Services
         public DbSet<Course> Courses { get; set; }
         public DbSet<ActiveCourse> ActiveCourses { get; set; }
         public DbSet<Quiz> Quizzes { get; set; } = null!;
+        public DbSet<Certificate> Certificates { get; set; } = null!;
 
         public SkillupDbContext(DbContextOptions<SkillupDbContext> options) : base(options)
         {
@@ -25,9 +26,9 @@ namespace skillup.server.Services
                         );
             });
 
-            modelBuilder.Entity<Course>(entity =>
+            modelBuilder.Entity<Course>(e =>
             {
-                entity.HasIndex(c => c.Title).IsUnique();
+                e.HasIndex(c => c.Title).IsUnique();
             });
             
             modelBuilder.Entity<ActiveCourse>(e =>
@@ -36,14 +37,19 @@ namespace skillup.server.Services
             });
 
 
-                modelBuilder.Entity<Quiz>(entity =>
-                {
-                    entity.Property(q => q.Id)
-                          .HasConversion(
-                              id => id.ToString(),
-                              value => MongoDB.Bson.ObjectId.Parse(value)
-                          );
-                });
+            modelBuilder.Entity<Quiz>(entity =>
+            {
+                entity.Property(q => q.Id)
+                        .HasConversion(
+                            id => id.ToString(),
+                            value => MongoDB.Bson.ObjectId.Parse(value)
+                        );
+            });
+
+            modelBuilder.Entity<Certificate>(e =>
+            {
+                e.HasIndex(x => new { x.UserId, x.CourseSlug }).IsUnique();
+            });
 
             base.OnModelCreating(modelBuilder);
 

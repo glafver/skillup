@@ -46,6 +46,7 @@ namespace skillup.server
             builder.Services.AddScoped<ICourseService, CourseService>();
             builder.Services.AddSingleton<CourseContentService>();
             builder.Services.AddScoped<IQuizService, QuizService>();
+            builder.Services.AddScoped<ICertificateService, CertificateService>();
 
             //JWT
             var key = builder.Configuration["Jwt:Key"]

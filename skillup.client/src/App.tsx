@@ -14,6 +14,7 @@ import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import TestActiveCourses from "./pages/TestActiveCourses";
+import TestCertificate from "./pages/TestCertificate";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/quiz/:slug" element={<Quiz />} />
           <Route path="/quiz/:slug/results" element={<Results />} />
           <Route path="/test/active-courses" element={<TestActiveCourses />} />
+          <Route path="/test/certificate" element={<TestCertificate />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
