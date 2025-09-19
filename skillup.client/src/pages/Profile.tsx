@@ -90,7 +90,12 @@ export default function Profile() {
     fetchCourses();
   }, [API]);
 
-  if (!profile) return <p>Loading...</p>;
+  if (!profile)
+    return (
+      <div className="flex items-center justify-center mx-auto">
+        <p className="text-xl ">Loading...</p>
+      </div>
+    );
 
   return (
     <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
