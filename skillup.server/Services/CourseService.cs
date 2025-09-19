@@ -107,18 +107,18 @@ namespace skillup.server.Services
             return activeCourse;
         }
 
-        public async Task<object?> GetCourseStatusAsync(string userId, string courseSlug)
+        public async Task<CourseStatusDto?> GetCourseStatusAsync(string userId, string courseSlug)
         {
             var activeCourse = await _dbContext.ActiveCourses
                 .FirstOrDefaultAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
 
             if (activeCourse == null) return null;
 
-            return new
+            return new CourseStatusDto
             {
-                status = activeCourse.Status.ToString(),          
-                level = activeCourse.CurrentLevel.ToString(),     
-                isCompleted = activeCourse.CompletedAt != null   
+                Status = activeCourse.Status.ToString() ?? "",
+                Level = activeCourse.CurrentLevel.ToString() ?? "",
+                IsCompleted = activeCourse.CompletedAt != null
             };
         }
 
@@ -172,6 +172,13 @@ namespace skillup.server.Services
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
+    }
+
+    public class CourseStatusDto
+    {
+        public string Status { get; set; } = string.Empty;
+        public string Level { get; set; } = string.Empty;
+        public bool IsCompleted { get; set; }
     }
 
 }

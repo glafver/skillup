@@ -38,6 +38,8 @@ export default function Results() {
     const [nextLevel, setNextLevel] = useState<string | null>(null);
     const [completed, setCompleted] = useState(false);
 
+    const storageKey = `course_${slug}_${level}`;
+
     const updateUserLevel = async (slug: string) => {
         try {
             const res = await fetch(`${BASE_URL}/api/courses/${slug}/advance`, {
@@ -49,8 +51,14 @@ export default function Results() {
             });
             if (!res.ok) throw new Error("Failed to advance course");
             const data = await res.json();
-            setNextLevel(data.updatedCourse.currentLevel);
-            setCompleted(!!data.updatedCourse.completedAt);
+            setNextLevel(data.levelName);
+            const isCompleted = !!data.updatedCourse.completedAt;
+            setCompleted(isCompleted);
+
+            localStorage.setItem(
+                storageKey,
+                JSON.stringify({ nextLevel: data.levelName, completed: isCompleted })
+            );
         } catch (err) {
             console.error("Error updating user level:", err);
         }
@@ -96,15 +104,34 @@ export default function Results() {
 
     useEffect(() => {
         if (unlocked && slug) {
-            updateUserLevel(slug);
+            const stored = localStorage.getItem(storageKey);
+            if (!stored) {
+                updateUserLevel(slug);
+            }
         }
-    }, [unlocked, slug]);
+    }, [unlocked, slug, storageKey]);
 
     useEffect(() => {
         if (completed) {
             setShowModal(true);
         }
     }, [completed]);
+
+    useEffect(() => {
+        const stored = localStorage.getItem(storageKey);
+        if (stored) {
+            const { nextLevel: nl, completed: comp } = JSON.parse(stored);
+            setNextLevel(nl);
+            setCompleted(comp);
+        }
+    }, [storageKey]);
+
+    const handleNextLevelClick = async () => {
+        if (slug) {
+            localStorage.removeItem(storageKey);
+            navigate(`/courses/${slug}`);
+        }
+    };
 
     return (
         <div className="max-w-4xl mx-auto mt-10 p-6">
@@ -139,7 +166,9 @@ export default function Results() {
                         <Confetti
                             recycle={showModal}
                             numberOfPieces={300}
-                            className="-z-10"
+                            className="-z-10 "
+                            height={3000}
+                            width={3000}
                             colors={["#F87171", "#34D399", "#60A5FA", "#FBBF24", "#A78BFA"]}
                         />
                     </motion.div>
@@ -158,7 +187,7 @@ export default function Results() {
 
             {unlocked && !completed && (
                 <p className="mb-4 text-center text-lg">
-                    New level {nextLevel} unlocked — one step closer to your certificate! 🏆
+                    New level <b>{nextLevel}</b> is unlocked — one step closer to your certificate! 🏆
                 </p>
             )}
 
@@ -206,7 +235,7 @@ export default function Results() {
                         ) :
                             unlocked ? (
                                 <button
-                                    onClick={() => navigate(`/courses/${slug}`)}
+                                    onClick={handleNextLevelClick}
                                     className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
                                 >
                                     Next Level

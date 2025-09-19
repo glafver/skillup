@@ -81,9 +81,22 @@ namespace skillup.server.Controllers
             if (userId is null) return Unauthorized();
 
             var status = await _service.GetCourseStatusAsync(userId, slug);
-            if (status == null) return Ok(new { active = false, slug });
+            if (status == null)
+                return Ok(new 
+                {   
+                    active = false, 
+                    level = (string?)null, 
+                    isCompleted =false, 
+                    slug 
+                });
 
-            return Ok(new { active = true, status, slug });
+            return Ok(new
+            {
+                active = true,
+                level = status.Level,
+                isCompleted = status.IsCompleted,
+                slug
+            });
         }
 
         [HttpGet("active")]
@@ -108,7 +121,7 @@ namespace skillup.server.Controllers
             {
                 var updatedCourse = await _service.AdvanceActiveCourseAsync(userId, slug);
                 var levelName = updatedCourse.CurrentLevel.ToString();
-                return Ok(new { message = "Course advanced!", updatedCourse, level = levelName });
+                return Ok(new { message = "Course advanced!", updatedCourse, levelName = levelName });
             }
             catch (Exception ex)
             {

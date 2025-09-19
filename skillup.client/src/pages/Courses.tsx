@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { CourseCard } from "../components/CourseCard";
+import { motion } from "framer-motion";
 
 export default function Courses() {
     type Course = {
@@ -35,7 +36,10 @@ export default function Courses() {
         );
 
     return (
-        <div className="container mx-auto px-12 xl:px-12 py-12">
+        <motion.div className="container mx-auto px-12 xl:px-12 py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}>
             <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Courses Page</h1>
 
             <div className="max-w-8xl mx-auto space-y-4">
@@ -52,6 +56,6 @@ export default function Courses() {
                     ))}
                 </ul>
             </div>
-        </div>
+        </motion.div>
     );
 }

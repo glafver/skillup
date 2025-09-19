@@ -18,8 +18,8 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.status) {
-          setCompleted(data?.status?.isCompleted);
+        if (data) {
+          setCompleted(data?.isCompleted);
         }
         setActive(Boolean(data.active));
       }
