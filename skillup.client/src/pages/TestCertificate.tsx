@@ -17,7 +17,7 @@ export default function TestCertificate() {
     }
     setIssuing(true);
     try {
-      const res = await fetch(`${API}/api/certificates/${slug}`, {
+      const res = await fetch(`${API}/api/certificate/${slug}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authService.getToken()}`,

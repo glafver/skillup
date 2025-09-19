@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { CourseCard } from "../components/CourseCard";
 
-export default function Courses() {
+export default function Course() {
     type Course = {
-    title: string;
-    description: string;
-    image: string;
-    slug: string;
+        title: string;
+        description: string;
+        image: string;
+        slug: string;
     };
 
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [course, setCourse] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
 
     const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        fetch(`${API_URL}/api/courses`)
+        fetch(`${API_URL}/api/course`)
             .then((res) => res.json())
             .then((data) => {
-                setCourses(data);
+                setCourse(data);
                 setLoading(false);
             })
             .catch((err) => {
-                console.error("Error fetching courses:", err);
+                console.error("Error fetching course:", err);
                 setLoading(false);
             });
     }, []);
@@ -39,17 +39,17 @@ export default function Courses() {
             <h1 className="text-3xl md:text-4xl font-bold mb-6 text-center">Courses Page</h1>
 
             <div className="max-w-8xl mx-auto space-y-4">
-                <ul className="flex flex-col grid grid-cols-2 gap-8">
-                {courses.map((course, idx) => (
-                    <li key={idx}>
-                    <CourseCard
-                        title={course.title}
-                        description={course.description}
-                        image={course.image}
-                        slug={course.slug}
-                    />
-                    </li>
-                ))}
+                <ul className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    {course.map((course, idx) => (
+                        <li key={idx}>
+                            <CourseCard
+                                title={course.title}
+                                description={course.description}
+                                image={course.image}
+                                slug={course.slug}
+                            />
+                        </li>
+                    ))}
                 </ul>
             </div>
         </div>

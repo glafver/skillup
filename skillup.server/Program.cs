@@ -78,17 +78,17 @@ namespace skillup.server
 
 
             // Swagger
-            //builder.Services.AddEndpointsApiExplorer();
-            //builder.Services.AddSwaggerGen();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
             //Swagger in development
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.UseSwagger();
-            //app.UseSwaggerUI();
-            //}
+            if (app.Environment.IsDevelopment())
+            {
+               app.UseSwagger();
+            app.UseSwaggerUI();
+            }
 
             //app.UseHttpsRedirection();
 
@@ -110,7 +110,6 @@ namespace skillup.server
             
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
 
             app.Run();

@@ -7,14 +7,22 @@ using Microsoft.AspNetCore.Authorization;
 namespace skillup.server.Controllers
 {
     [ApiController]
-    [Route("api/courses")]
-    public class CoursesController : ControllerBase
+    [Route("api/course")]
+    public class CourseController : ControllerBase
     {
         private readonly ICourseService _service;
 
-        public CoursesController(ICourseService service)
+        public CourseController(ICourseService service)
         {
             _service = service;
+        }
+
+
+        [HttpGet] 
+        public async Task<IActionResult> GetAll()
+        {
+            var courses = await _service.GetAllCourseAsync();
+            return Ok(courses);
         }
 
         [HttpGet("{id}")]

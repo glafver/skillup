@@ -4,13 +4,13 @@ using skillup.server.Services;
 using skillup.server.Extensions;
 
 [ApiController]
-[Route("api/certificates")]
+[Route("api/certificate")]
 [Authorize]
-public class CertificatesController : ControllerBase
+public class CertificateController : ControllerBase
 {
     private readonly ICertificateService _certService;
 
-    public CertificatesController(ICertificateService certService)
+    public CertificateController(ICertificateService certService)
     {
         _certService = certService;
     }

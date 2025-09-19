@@ -29,7 +29,7 @@ export default function TestActiveCourses() {
         setLoading(false);
         return;
       }
-      const res = await fetch(`${API}/api/courses/active`, {
+      const res = await fetch(`${API}/api/course/active`, {
         headers: { Authorization: `Bearer ${authService.getToken()}` },
       });
       if (!res.ok) {

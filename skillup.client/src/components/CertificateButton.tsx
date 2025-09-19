@@ -21,7 +21,7 @@ const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifik
     }
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/certificates/me/${courseSlug}`, {
+      const res = await fetch(`${API}/api/certificate/me/${courseSlug}`, {
         headers: { Authorization: `Bearer ${authService.getToken()}` },
       });
       if (!res.ok) throw new Error("Kunde inte hämta certifikat");

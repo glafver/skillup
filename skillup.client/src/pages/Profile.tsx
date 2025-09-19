@@ -75,7 +75,7 @@ export default function Profile() {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${API}/api/courses/active`, {
+        const res = await fetch(`${API}/api/course/active`, {
           headers: { Authorization: `Bearer ${authService.getToken()}` },
         });
         if (!res.ok) throw new Error(await res.text());

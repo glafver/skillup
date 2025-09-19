@@ -91,7 +91,7 @@ export default function CourseContentPage() {
 
       <div className="mt-6">
         <button
-          onClick={() => navigate("/courses")}
+          onClick={() => navigate("/course")}
           className="px-4 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800
              transition transform hover:scale-105"
         >
