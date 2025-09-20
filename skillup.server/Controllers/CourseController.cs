@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using skillup.server.Models;
 using skillup.server.Services;
 using skillup.server.Extensions;
@@ -7,17 +7,18 @@ using Microsoft.AspNetCore.Authorization;
 namespace skillup.server.Controllers
 {
     [ApiController]
-    [Route("api/courses")]
-    public class CoursesController : ControllerBase
+    [Route("api/course")]
+    public class CourseController : ControllerBase
     {
         private readonly ICourseService _service;
 
-        public CoursesController(ICourseService service)
+        public CourseController(ICourseService service)
         {
             _service = service;
         }
 
-        [HttpGet]
+
+        [HttpGet] 
         public async Task<IActionResult> GetAll()
         {
             var courses = await _service.GetAllCourseAsync();
@@ -29,37 +30,6 @@ namespace skillup.server.Controllers
         {
             var course = await _service.GetCourseByIdAsync(id);
             return course is null ? NotFound() : Ok(course);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Course course)
-        {
-            try
-            {
-                var created = await _service.AddCourseAsync(course);
-                return Ok(created);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody] Course course)
-        {
-            if (course.Id.ToString() != id)
-                return BadRequest(new { message = "Route id and payload id must match." });
-
-            await _service.UpdateCourseAsync(course);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
-        {
-            await _service.DeleteCourseAsync(id);
-            return NoContent();
         }
 
        [HttpPost("{slug}/started")]
@@ -80,8 +50,23 @@ namespace skillup.server.Controllers
             var userId = User.GetUserId();
             if (userId is null) return Unauthorized();
 
-            var isActive = await _service.IsCourseActiveAsync(userId, slug);
-            return Ok(new { active = isActive });
+            var status = await _service.GetCourseStatusAsync(userId, slug);
+            if (status == null)
+                return Ok(new 
+                {   
+                    active = false, 
+                    level = (string?)null, 
+                    isCompleted =false, 
+                    slug 
+                });
+
+            return Ok(new
+            {
+                active = true,
+                level = status.Level,
+                isCompleted = status.IsCompleted,
+                slug
+            });
         }
 
         [HttpGet("active")]
@@ -95,6 +80,23 @@ namespace skillup.server.Controllers
             return Ok(activeCourses);
         }
 
+        [HttpPost("{slug}/advance")]
+        [Authorize]
+        public async Task<IActionResult> AdvanceCourse(string slug)
+        {
+            var userId = User.GetUserId();
+            if (userId is null) return Unauthorized();
 
+            try
+            {
+                var updatedCourse = await _service.AdvanceActiveCourseAsync(userId, slug);
+                var levelName = updatedCourse.CurrentLevel.ToString();
+                return Ok(new { message = "Course advanced!", updatedCourse, levelName = levelName });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

@@ -48,6 +48,10 @@ export const authService = {
   },
 
   logout() {
+    Object.keys(localStorage)
+      .filter((key) => key.startsWith("course_"))
+      .forEach((key) => localStorage.removeItem(key));
+    localStorage.removeItem("quizAnswers");
     localStorage.removeItem("token");
   },
 
