@@ -24,6 +24,6 @@ namespace skillup.server.Models
         public ActiveCourseStatus Status { get; set; } = ActiveCourseStatus.Active;
 
         public DateTime StartedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? CompletedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CompletedAt { get; set; } = null;
     }
 }
