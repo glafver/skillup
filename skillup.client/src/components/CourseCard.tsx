@@ -13,11 +13,12 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
   useEffect(() => {
     const fetchStatus = async () => {
       if (!authService.isLoggedIn()) return;
-      const res = await fetch(`${API}/api/courses/${slug}/status`, {
+      const res = await fetch(`${API}/api/course/${slug}/status`, {
         headers: { Authorization: `Bearer ${authService.getToken()}` },
       });
       if (res.ok) {
         const data = await res.json();
+        console.log(data);
         if (data) {
           setCompleted(data?.isCompleted);
         }
@@ -40,10 +41,10 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
     }
 
     if (active) {
-      navigate(`/courses/${slug}`);
+      navigate(`/course/${slug}`);
       return;
     }
-    const res = await fetch(`${API}/api/courses/${slug}/started`, {
+    const res = await fetch(`${API}/api/course/${slug}/started`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +55,7 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
     if (res.ok) {
       setActive(true);
       alert("Course started!");
-      navigate(`/courses/${slug}`);
+      navigate(`/course/${slug}`);
     } else {
       const msg = await res.text();
       alert(msg || "Failed to start course.");

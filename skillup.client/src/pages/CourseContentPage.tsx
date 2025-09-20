@@ -34,7 +34,7 @@ export default function CourseContentPage() {
 
     const fetchActiveCourses = async () => {
       try {
-        const res = await fetch(`${API}/api/courses/active`, {
+        const res = await fetch(`${API}/api/course/active`, {
           headers: { Authorization: `Bearer ${authService.getToken()}` },
         });
         if (!res.ok) throw new Error(await res.text());
@@ -54,7 +54,7 @@ export default function CourseContentPage() {
   useEffect(() => {
     if (!loading) {
       if (!authService.isLoggedIn() || !activeCourse || !currentLevel) {
-        navigate("/courses");
+        navigate("/course");
       }
     }
   }, [loading, activeCourse, currentLevel, navigate]);
@@ -73,7 +73,7 @@ export default function CourseContentPage() {
         <p className="text-red-600">{error}</p>
         <button
           className="px-5 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800 transform transition duration-300 hover:scale-105"
-          onClick={() => navigate("/courses")}
+          onClick={() => navigate("/course")}
         >
           Back to courses
         </button>

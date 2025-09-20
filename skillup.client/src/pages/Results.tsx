@@ -42,7 +42,7 @@ export default function Results() {
 
     const updateUserLevel = async (slug: string) => {
         try {
-            const res = await fetch(`${BASE_URL}/api/courses/${slug}/advance`, {
+            const res = await fetch(`${BASE_URL}/api/course/${slug}/advance`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -51,6 +51,7 @@ export default function Results() {
             });
             if (!res.ok) throw new Error("Failed to advance course");
             const data = await res.json();
+            console.log(data);
             setNextLevel(data.levelName);
             const isCompleted = !!data.updatedCourse.completedAt;
             setCompleted(isCompleted);
@@ -129,7 +130,7 @@ export default function Results() {
     const handleNextLevelClick = async () => {
         if (slug) {
             localStorage.removeItem(storageKey);
-            navigate(`/courses/${slug}`);
+            navigate(`/course/${slug}`);
         }
     };
 
@@ -243,7 +244,7 @@ export default function Results() {
                             ) : (
                                 <>
                                     <button
-                                        onClick={() => navigate(`/courses/${slug}`)}
+                                        onClick={() => navigate(`/course/${slug}`)}
                                         className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-white text-cyan-700 border border-cyan-700 hover:bg-cyan-700 hover:text-white"
                                     >
                                         Read Theory

@@ -2,28 +2,28 @@ import { useEffect, useState } from "react";
 import { CourseCard } from "../components/CourseCard";
 import { motion } from "framer-motion";
 
-export default function Courses() {
+export default function Course() {
     type Course = {
         title: string;
         description: string;
         image: string;
-        slug: string; // lägg till slug här så du slipper felet
+        slug: string;
     };
 
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [course, setCourse] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
 
     const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        fetch(`${API_URL}/api/courses`)
+        fetch(`${API_URL}/api/course`)
             .then((res) => res.json())
             .then((data) => {
-                setCourses(data);
+                setCourse(data);
                 setLoading(false);
             })
             .catch((err) => {
-                console.error("Error fetching courses:", err);
+                console.error("Error fetching course:", err);
                 setLoading(false);
             });
     }, []);
@@ -44,7 +44,7 @@ export default function Courses() {
 
             <div className="max-w-8xl mx-auto space-y-4">
                 <ul className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    {courses.map((course, idx) => (
+                    {course.map((course, idx) => (
                         <li key={idx}>
                             <CourseCard
                                 title={course.title}

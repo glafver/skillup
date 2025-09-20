@@ -55,7 +55,7 @@ const Quiz: React.FC = () => {
 
         const fetchActiveCourses = async () => {
             try {
-                const res = await fetch(`${BASE_URL}/api/courses/active`, {
+                const res = await fetch(`${BASE_URL}/api/course/active`, {
                     headers: { Authorization: `Bearer ${authService.getToken()}` },
                 });
                 if (!res.ok) throw new Error(await res.text());
@@ -87,7 +87,7 @@ const Quiz: React.FC = () => {
         if (!loading) {
             const activeCourse = activeCourses?.find(c => c.courseSlug === slug);
             if (!authService.isLoggedIn() || !activeCourse || activeCourse.currentLevel !== level) {
-                navigate("/courses");
+                navigate("/course");
             }
         }
     }, [loading, activeCourses, level, slug, navigate]);

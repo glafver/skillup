@@ -6,6 +6,7 @@ namespace skillup.server.Models
     {
         
         public ObjectId Id { get; set; }
+        
         [Required(ErrorMessage = "Firstname is required")]
         public string Firstname { get; set; } = string.Empty;
         [Required(ErrorMessage = "Lastname is required")]
