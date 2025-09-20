@@ -5,7 +5,6 @@ namespace skillup.server.Services
     public class SkillupDbContext : DbContext
     {
         
-
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<ActiveCourse> ActiveCourses { get; set; }
@@ -22,8 +21,8 @@ namespace skillup.server.Services
                 entity.Property(u => u.Id)
                     .HasConversion(
                         id => id.ToString(),// MongoDB ObjectId till string när det sparas
-                            value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
-                        );
+                        value => MongoDB.Bson.ObjectId.Parse(value) // string till ObjectId när det läses
+                    );
             });
 
             modelBuilder.Entity<Course>(e =>
@@ -40,10 +39,10 @@ namespace skillup.server.Services
             modelBuilder.Entity<Quiz>(entity =>
             {
                 entity.Property(q => q.Id)
-                        .HasConversion(
-                            id => id.ToString(),
-                            value => MongoDB.Bson.ObjectId.Parse(value)
-                        );
+                    .HasConversion(
+                        id => id.ToString(),
+                        value => MongoDB.Bson.ObjectId.Parse(value)
+                    );
             });
 
             modelBuilder.Entity<Certificate>(e =>

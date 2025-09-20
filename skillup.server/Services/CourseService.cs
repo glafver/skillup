@@ -77,10 +77,49 @@ namespace skillup.server.Services
             return activeCourse;
         }
 
-        public async Task<bool> IsCourseActiveAsync(string userId, string courseSlug)
+        public async Task<ActiveCourse> AdvanceActiveCourseAsync(string userId, string courseSlug)
         {
-            return await _dbContext.ActiveCourses
-                .AnyAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+            var activeCourse = await _dbContext.ActiveCourses
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+
+            if (activeCourse == null)
+                throw new Exception("Active course not found.");
+
+            var levels = Enum.GetValues(typeof(LevelCode)).Cast<LevelCode>().ToList();
+            var currentIndex = levels.IndexOf(activeCourse.CurrentLevel);
+
+            if (currentIndex == -1)
+                throw new Exception("Invalid current level.");
+
+            if (currentIndex == levels.Count - 1)
+            {
+                activeCourse.Status = ActiveCourseStatus.Completed;
+                activeCourse.CompletedAt = DateTime.UtcNow;
+            }
+            else
+            {
+                activeCourse.CurrentLevel = levels[currentIndex + 1];
+            }
+
+            _dbContext.ActiveCourses.Update(activeCourse);
+            await _dbContext.SaveChangesAsync();
+
+            return activeCourse;
+        }
+
+        public async Task<CourseStatusDto?> GetCourseStatusAsync(string userId, string courseSlug)
+        {
+            var activeCourse = await _dbContext.ActiveCourses
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.CourseSlug == courseSlug);
+
+            if (activeCourse == null) return null;
+
+            return new CourseStatusDto
+            {
+                Status = activeCourse.Status.ToString() ?? "",
+                Level = activeCourse.CurrentLevel.ToString() ?? "",
+                IsCompleted = activeCourse.CompletedAt != null
+            };
         }
 
         public async Task<List<ActiveCourseDto>> GetUserActiveCoursesWithDetailsAsync(string userId)
@@ -133,6 +172,13 @@ namespace skillup.server.Services
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
+    }
+
+    public class CourseStatusDto
+    {
+        public string Status { get; set; } = string.Empty;
+        public string Level { get; set; } = string.Empty;
+        public bool IsCompleted { get; set; }
     }
 
 }
