@@ -42,7 +42,7 @@ export function Navbar() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="/courses" className={getLinkClasses("/courses")}>
+                        <Link to="/course" className={getLinkClasses("/course")}>
                             Courses
                         </Link>
                     </li>
@@ -93,8 +93,8 @@ export function Navbar() {
                         </li>
                         <li>
                             <Link
-                                to="/courses"
-                                className={getLinkClasses("/courses")}
+                                to="/course"
+                                className={getLinkClasses("/course")}
                                 onClick={() => setMenuOpen(false)}
                             >
                                 Courses

@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace skillup.server.Models
 {
+    //Använd LevelCode och ActiveCourseStatus enums för att representera och updatera nivåer och statusar
     public enum LevelCode { Beginner, Advanced, Expert }
     public enum ActiveCourseStatus { Active, Completed }
 
@@ -23,6 +24,7 @@ namespace skillup.server.Models
         public ActiveCourseStatus Status { get; set; } = ActiveCourseStatus.Active;
 
         public DateTime StartedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? CompletedAt { get; set; }
+        public DateTime? CompletedAt { get; set; } = null;
+
     }
 }

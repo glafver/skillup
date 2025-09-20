@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./pages/Home";
-import Courses from "./pages/Courses";
+import Course from "./pages/Course";
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
@@ -14,6 +14,7 @@ import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import TestActiveCourses from "./pages/TestActiveCourses";
+import TestCertificate from "./pages/TestCertificate";
 
 
 function App() {
@@ -23,16 +24,17 @@ function App() {
       <main className="flex flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/courses" element={<Courses />} />
+          <Route path="/course" element={<Course />} />
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
-          <Route path="/courses/:slug" element={<CourseContentPage />} />
+          <Route path="/course/:slug" element={<CourseContentPage />} />
           <Route path="/quiz/:slug" element={<Quiz />} />
           <Route path="/quiz/:slug/results" element={<Results />} />
           <Route path="/test/active-courses" element={<TestActiveCourses />} />
+          <Route path="/test/certificate" element={<TestCertificate />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
