@@ -25,6 +25,5 @@ namespace skillup.server.Models
 
         public DateTime StartedAt { get; set; } = DateTime.UtcNow;
         public DateTime? CompletedAt { get; set; } = null;
-
     }
 }

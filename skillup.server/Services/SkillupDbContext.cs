@@ -36,18 +36,13 @@ namespace skillup.server.Services
             });
 
 
-                modelBuilder.Entity<Quiz>(entity =>
-                {
-                    entity.Property(q => q.Id)
-                          .HasConversion(
-                              id => id.ToString(),
-                              value => MongoDB.Bson.ObjectId.Parse(value)
-                          );
-                });
-
-            modelBuilder.Entity<Certificate>(e =>
+            modelBuilder.Entity<Quiz>(entity =>
             {
-                e.HasIndex(x => new { x.UserId, x.CourseSlug }).IsUnique();
+                entity.Property(q => q.Id)
+                    .HasConversion(
+                        id => id.ToString(),
+                        value => MongoDB.Bson.ObjectId.Parse(value)
+                    );
             });
 
             modelBuilder.Entity<Certificate>(e =>
