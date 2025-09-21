@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
+import CertificateButton from "./CertificateButton";
 
 type Props = { title: string; description: string; image: string; slug: string; };
 
@@ -73,17 +74,16 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
         <p className="text-gray-600">{description}</p>
       </div>
 
-      <button
-        onClick={handleClick}
-        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
-      >
-        {completed
-          ? "Get Certificate"
-          : active
-            ? "Resume"
-            : "Start Course"
-        }
-      </button>
+      {completed ? (
+        <CertificateButton courseSlug={slug} />
+      ) : (
+        <button
+          onClick={handleClick}
+          className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
+        >
+          {active ? "Resume" : "Start Course"}
+        </button>
+      )}
     </div>
   );
 };

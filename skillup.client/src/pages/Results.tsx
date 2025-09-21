@@ -3,6 +3,7 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import { authService } from "../services/authService";
+import CertificateButton from "../components/CertificateButton";
 
 interface QuizQuestion {
     id: number;
@@ -227,12 +228,7 @@ export default function Results() {
 
                     <div className="text-center mt-4 mb-8 flex flex-col md:flex-row justify-center gap-4">
                         {completed ? (
-                            <button
-                                onClick={() => navigate(`/certificate/${slug}`)}
-                                className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
-                            >
-                                Get Certificate
-                            </button>
+                            <CertificateButton courseSlug={slug ?? ""} />
                         ) :
                             unlocked ? (
                                 <button
