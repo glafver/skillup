@@ -7,6 +7,7 @@ import type {
 import profileService from "../services/profileService";
 import AvatarSection from "../components/AvatarSection";
 import { authService } from "../services/authService";
+import CertificateButton from "../components/CertificateButton";
 
 export default function Profile() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -206,10 +207,15 @@ export default function Profile() {
                       {new Date(c.startedAt).toISOString().split("T")[0]}
                     </span>
                   </div>
+
                   {c.currentLevel === "Expert" && c.status === "Completed" && (
-                    <button className="ml-auto mr-1 px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md">
-                      Get Certificate
-                    </button>
+                    <CertificateButton
+                      courseSlug={c.courseSlug}
+                      label="View Certificate"
+                    />
+                    // <button className="ml-auto mr-1 px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md">
+                    //   Get Certificate
+                    // </button>
                   )}
                 </div>
               </div>
