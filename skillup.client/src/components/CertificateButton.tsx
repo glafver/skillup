@@ -41,7 +41,8 @@ const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifik
       <button
         onClick={fetchCertificate}
         disabled={loading}
-        className="px-4 py-2 rounded bg-sky-700 text-white hover:bg-sky-800 disabled:opacity-50 transition"
+        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-sky-700 text-white hover:bg-sky-800 transition transform hover:scale-105"
+        
       >
         {loading ? "Laddar..." : label}
       </button>
