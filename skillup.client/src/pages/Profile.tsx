@@ -201,7 +201,7 @@ export default function Profile() {
                       {new Date(c.startedAt).toISOString().split("T")[0]}
                     </span>
                   </div>
-                  {c.currentLevel === "Beginner" && c.status === "Active" && (
+                  {c.currentLevel === "Expert" && c.status === "Completed" && (
                     <button className="ml-auto mr-1 px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md">
                       Get Certificate
                     </button>
