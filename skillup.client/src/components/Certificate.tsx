@@ -29,7 +29,10 @@ const Certificate: React.FC<Props> = ({
   courseIconSrc,
   showPrintButton = true,
 }) => {
-  const issued = useMemo(() => formatSvDate(certificate.issuedAt), [certificate.issuedAt]);
+  const issued = useMemo(
+    () => formatSvDate(certificate.issuedAt),
+    [certificate.issuedAt]
+  );
   const fullName = useMemo(
     () => `${certificate.firstname} ${certificate.lastname}`.trim(),
     [certificate.firstname, certificate.lastname]
@@ -65,7 +68,7 @@ const Certificate: React.FC<Props> = ({
           </p>
 
           <p className="text-center text-lg sm:text-xl text-slate-700">
-            har framgångsrikt slutfört kursen
+            Have successfully completed the course
           </p>
           <p className="text-center font-[Playfair_Display] text-2xl sm:text-3xl text-sky-800 mt-2">
             {certificate.courseTitle}
@@ -75,12 +78,20 @@ const Certificate: React.FC<Props> = ({
 
           <div className="mt-8 flex items-end justify-between gap-8">
             <div className="flex-1">
-              <p className="text-sm uppercase tracking-wider text-slate-500">Datum</p>
-              <p className="mt-1 text-lg font-medium text-slate-800">{issued}</p>
+              <p className="text-sm uppercase tracking-wider text-slate-500">
+                Date
+              </p>
+              <p className="mt-1 text-lg font-medium text-slate-800">
+                {issued}
+              </p>
             </div>
 
             <div className="flex-1 flex justify-end">
-              <img src={iconSrc} alt="Kursikon" className="w-[100px] h-[100px]" />
+              <img
+                src={iconSrc}
+                alt="Kursikon"
+                className="w-[100px] h-[100px]"
+              />
             </div>
           </div>
         </div>
