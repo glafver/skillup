@@ -172,7 +172,7 @@ export default function Profile() {
         <div className="mt-6">
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md"
+            className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md transition transform hover:scale-105"
           >
             Save Changes
           </button>
@@ -213,9 +213,6 @@ export default function Profile() {
                       courseSlug={c.courseSlug}
                       label="View Certificate"
                     />
-                    // <button className="ml-auto mr-1 px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md">
-                    //   Get Certificate
-                    // </button>
                   )}
                 </div>
               </div>
