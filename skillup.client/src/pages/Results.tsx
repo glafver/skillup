@@ -52,14 +52,28 @@ export default function Results() {
             });
             if (!res.ok) throw new Error("Failed to advance course");
             const data = await res.json();
-            console.log(data);
             setNextLevel(data.levelName);
             const isCompleted = !!data.updatedCourse.completedAt;
             setCompleted(isCompleted);
 
+            let certificate = null;
+
+            if (isCompleted) {
+                const certRes = await fetch(`${BASE_URL}/api/certificate/${slug}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${authService.getToken()}`
+                    }
+                });
+
+                if (!certRes.ok) throw new Error("Failed to issue certificate");
+                certificate = await certRes.json();
+            }
+
             localStorage.setItem(
                 storageKey,
-                JSON.stringify({ nextLevel: data.levelName, completed: isCompleted })
+                JSON.stringify({ nextLevel: data.levelName, completed: isCompleted, certificate })
             );
         } catch (err) {
             console.error("Error updating user level:", err);

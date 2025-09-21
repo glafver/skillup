@@ -19,7 +19,6 @@ export const CourseCard = ({ title, description, image, slug }: Props) => {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
         if (data) {
           setCompleted(data?.isCompleted);
         }
