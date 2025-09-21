@@ -8,7 +8,10 @@ type Props = {
   label?: string;
 };
 
-const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifikat" }) => {
+const CertificateButton: React.FC<Props> = ({
+  courseSlug,
+  label = "View Certificate",
+}) => {
   const [open, setOpen] = useState(false);
   const [certificate, setCertificate] = useState<CertificateDto | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,7 +19,7 @@ const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifik
 
   const fetchCertificate = async () => {
     if (!authService.isLoggedIn()) {
-      alert("Du måste vara inloggad.");
+      alert("You must be logged in to view the certificate.");
       return;
     }
     setLoading(true);
@@ -24,13 +27,13 @@ const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifik
       const res = await fetch(`${API}/api/certificate/me/${courseSlug}`, {
         headers: { Authorization: `Bearer ${authService.getToken()}` },
       });
-      if (!res.ok) throw new Error("Kunde inte hämta certifikat");
+      if (!res.ok) throw new Error("Failed to fetch certificate");
       const data: CertificateDto = await res.json();
       setCertificate(data);
       setOpen(true);
     } catch (e) {
       console.error(e);
-      alert("Kunde inte hämta certifikatet.");
+      alert("Could not fetch certificate.");
     } finally {
       setLoading(false);
     }
@@ -41,10 +44,9 @@ const CertificateButton: React.FC<Props> = ({ courseSlug, label = "Visa certifik
       <button
         onClick={fetchCertificate}
         disabled={loading}
-        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-sky-700 text-white hover:bg-sky-800 transition transform hover:scale-105"
-        
+        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-slate-700 text-white hover:bg-teal-700 transition transform hover:scale-105"
       >
-        {loading ? "Laddar..." : label}
+        {loading ? "Loading..." : label}
       </button>
 
       <Modal open={open && !!certificate} onClose={() => setOpen(false)}>
