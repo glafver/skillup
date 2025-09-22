@@ -84,16 +84,16 @@ export default function Course() {
                         exit={{ opacity: 0 }}
                     >
                         <motion.div
-                            className="bg-white rounded-xl p-8 max-w-md text-center shadow-lg z-10"
+                            className="bg-white rounded-lg p-8 max-w-md text-center shadow-lg z-10"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.3 }}
                         >
                             <h2 className="text-2xl font-bold mb-4">{modalContent.title}</h2>
-                            <p className="mb-4 text-lg">{modalContent.message}</p>
+                            <p className="mb-4">{modalContent.message}</p>
 
                             <button
-                                className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
+                                className="bg-cyan-700 text-white px-6 py-2 rounded-md hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
                                 onClick={closeModal}
                             >
                                 OK

@@ -160,7 +160,7 @@ export default function Results() {
                         exit={{ opacity: 0 }}
                     >
                         <motion.div
-                            className="bg-white rounded-xl p-8 max-w-md text-center shadow-lg z-10"
+                            className="bg-white rounded-lg p-8 max-w-md text-center shadow-lg z-10"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.3 }}
@@ -173,7 +173,7 @@ export default function Results() {
                             </p>
 
                             <button
-                                className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
+                                className="bg-cyan-700 text-white px-6 py-2 rounded-md hover:bg-cyan-800 transition transform hover:scale-105 mx-auto block"
                                 onClick={() => setShowModal(false)}
                             >
                                 View Your Results
@@ -247,7 +247,7 @@ export default function Results() {
                             unlocked ? (
                                 <button
                                     onClick={handleNextLevelClick}
-                                    className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
+                                    className="px-6 py-2 rounded-md transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
                                 >
                                     Next Level
                                 </button>
@@ -255,13 +255,13 @@ export default function Results() {
                                 <>
                                     <button
                                         onClick={() => navigate(`/course/${slug}`)}
-                                        className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-white text-cyan-700 border border-cyan-700 hover:bg-cyan-700 hover:text-white"
+                                        className="px-6 py-2 rounded-md transition transform hover:scale-105 bg-white text-cyan-700 border border-cyan-700 hover:bg-cyan-700 hover:text-white"
                                     >
                                         Read Theory
                                     </button>
                                     <button
                                         onClick={() => navigate(`/quiz/${slug}?level=${level}`)}
-                                        className="px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
+                                        className="px-6 py-2 rounded-md transition transform hover:scale-105 bg-cyan-700 text-white hover:bg-cyan-800"
                                     >
                                         Retry Quiz
                                     </button>

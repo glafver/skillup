@@ -71,16 +71,18 @@ export const CourseCard = ({ title, description, image, slug, openModal }: Props
         <p className="text-gray-600">{description}</p>
       </div>
 
-      {completed ? (
-        <CertificateButton courseSlug={slug} />
-      ) : (
-        <button
-          onClick={handleClick}
-          className="flex-none self-center my-2 mx-4 px-4 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
-        >
-          {active ? "Resume" : "Start Course"}
-        </button>
-      )}
+      <div className="flex flex-shrink-0 items-center my-2  md:w-44 justify-center">
+        {completed ? (
+          <CertificateButton courseSlug={slug} />
+        ) : (
+          <button
+            onClick={handleClick}
+            className="flex-shrink-0 self-center mx-4 px-4 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
+          >
+            {active ? "Resume" : "Start Course"}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

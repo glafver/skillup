@@ -44,7 +44,7 @@ const CertificateButton: React.FC<Props> = ({
       <button
         onClick={fetchCertificate}
         disabled={loading}
-        className="flex-none self-center my-2 mx-4 px-4 py-2 text-sm font-medium rounded bg-slate-700 text-white hover:bg-teal-700 transition transform hover:scale-105"
+        className="flex-none self-center px-4 py-2 rounded-md bg-slate-700 text-white hover:bg-cyan-800 transition transform hover:scale-105"
       >
         {loading ? "Loading..." : label}
       </button>

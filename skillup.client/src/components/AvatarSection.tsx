@@ -48,7 +48,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ profile, onUpdateAvatar }
             <p className="text-gray-600">{profile.email}</p>
             <button
                 onClick={handleChangeAvatar}
-                className="mt-4 px-4 py-2 bg-cyan-700 hover:bg-teal-700 text-white rounded-md"
+                className="mt-4 px-4 py-2 bg-cyan-700 hover:bg-cyan-800 text-white rounded-md hover:scale-105"
             >
                 Change Avatar
             </button>
