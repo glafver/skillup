@@ -187,12 +187,12 @@ export default function Profile() {
 
         <ul className="space-y-3">
           {courses?.map((c) => (
-            <li key={c.id} className="flex rounded overflow-hidden bg-gray-100">
-              <div className="flex-shrink-0">
+            <li key={c.id} className="flex rounded overflow-hidden bg-gray-100 items-stretch">
+              <div className="flex-shrink-0 h-full aspect-square">
                 <img
                   src={`/${c.image}`}
                   alt={c.title}
-                  className="w-[96px] h-[96px] p-1 object-cover bg-white"
+                  className="p-1 object-cover max-h-28 bg-white w-full h-full"
                 />
               </div>
               <div className="flex-grow p-3">

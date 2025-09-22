@@ -92,7 +92,7 @@ const Certificate: React.FC<Props> = ({
             onClick={() => window.print()}
             className="px-4 py-2 rounded-lg bg-sky-700 text-white shadow hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-400"
           >
-            Skriv ut
+            Print
           </button>
         </div>
       )}
