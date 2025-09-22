@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams, useLocation, useNavigate, Link } from "react-router-dom";
 import { authService } from "../services/authService";
+import useConfirmLeave from "../hooks/useConfirmLeave";
 
 interface QuizQuestion {
     id: number;
@@ -27,11 +28,10 @@ interface UserAnswer {
 }
 
 const Quiz: React.FC = () => {
-    const { slug } = useParams<{ slug: string; }>();
+    const { slug } = useParams<{ slug: string }>();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const level = searchParams.get("level");
-
     const navigate = useNavigate();
 
     const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -47,9 +47,10 @@ const Quiz: React.FC = () => {
     const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
     const robotImages = Array.from({ length: 20 }, (_, i) => `/quiz/robo-${i + 1}.png`);
 
+    useConfirmLeave(!quizDone, "You haven't finished the quiz. Are you sure you want to leave?");
+
     useEffect(() => {
         if (!slug || !level) return;
-
         setLoading(true);
         setError(null);
 
@@ -78,9 +79,7 @@ const Quiz: React.FC = () => {
         };
 
         Promise.all([fetchActiveCourses(), fetchQuiz()]).finally(() => setLoading(false));
-
         return localStorage.removeItem("quizAnswers");
-
     }, [slug, level, BASE_URL]);
 
     useEffect(() => {
@@ -110,9 +109,7 @@ const Quiz: React.FC = () => {
         const storedAnswers: UserAnswer[] = JSON.parse(localStorage.getItem("quizAnswers") || "[]");
         storedAnswers.push({ questionId: currentIndex, answer });
         localStorage.setItem("quizAnswers", JSON.stringify(storedAnswers));
-
         setShowHint(false);
-
         if (currentIndex === questions.length - 1) {
             setQuizDone(true);
         } else {
@@ -184,22 +181,20 @@ const Quiz: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-2 gap-8">
-                {shuffledOptions
-                    .map((option, i) => {
-                        const correctAnswer = questions[currentIndex].answer;
-                        const isCorrect = option === correctAnswer;
-
-                        return (
-                            <button
-                                key={i}
-                                onClick={() => handleAnswer(option)}
-                                className={`bg-gray-200 px-6 py-4 rounded-lg text-center hover:scale-105 hover:shadow-md transition-transform duration-300 ease-out
+                {shuffledOptions.map((option, i) => {
+                    const correctAnswer = questions[currentIndex].answer;
+                    const isCorrect = option === correctAnswer;
+                    return (
+                        <button
+                            key={i}
+                            onClick={() => handleAnswer(option)}
+                            className={`bg-gray-200 px-6 py-4 rounded-lg text-center hover:scale-105 hover:shadow-md transition-transform duration-300 ease-out
                             ${showHint && isCorrect ? "text-green-700 font-bold" : "bg-gray-200"}`}
-                            >
-                                {option}
-                            </button>
-                        );
-                    })}
+                        >
+                            {option}
+                        </button>
+                    );
+                })}
             </div>
 
             <div className="mt-8">
