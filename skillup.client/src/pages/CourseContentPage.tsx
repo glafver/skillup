@@ -82,8 +82,8 @@ export default function CourseContentPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 text-center">
-      <h1 className="text-3xl font-bold mb-6">{content?.courseTitle} - {currentLevel?.name}</h1>
+    <div className="max-w-3xl mx-auto p-12  text-center">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6">{content?.courseTitle} - {currentLevel?.name}</h1>
 
       <div className="text-left">
         {currentLevel?.topics ? (
