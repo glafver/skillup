@@ -23,7 +23,8 @@ namespace skillup.server
             {
                 options.AddPolicy("AllowAll", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173") // React app URL
+                    policy.WithOrigins("http://localhost:5173", 
+                    "https://skillup-sysm8.netlify.app") 
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
