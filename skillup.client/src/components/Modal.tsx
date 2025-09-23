@@ -27,19 +27,19 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
   return createPortal(
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4"
-      onClick={onClose} 
+      onClick={onClose}
       aria-modal="true"
       role="dialog"
     >
       <div
         className="relative w-full max-w-6xl"
-        onClick={(e) => e.stopPropagation()} 
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
           className="absolute -top-3 right-0 translate-y-[-100%] bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
         >
-          Stäng
+          Close
         </button>
         {children}
       </div>

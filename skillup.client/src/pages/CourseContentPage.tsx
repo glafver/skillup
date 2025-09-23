@@ -82,8 +82,8 @@ export default function CourseContentPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 text-center">
-      <h1 className="text-3xl font-bold mb-6">{content?.courseTitle} - {currentLevel?.name}</h1>
+    <div className="max-w-3xl mx-auto p-12  text-center">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6">{content?.courseTitle} - {currentLevel?.name}</h1>
 
       <div className="text-left">
         {currentLevel?.topics ? (
@@ -106,7 +106,7 @@ export default function CourseContentPage() {
         )}
         <div className="mt-4 flex items-center justify-center">
           <button
-            className="px-5 py-2 rounded bg-cyan-700 text-white hover:bg-cyan-800 transform transition duration-300 hover:scale-105"
+            className="px-5 py-2 rounded-md bg-cyan-700 text-white hover:bg-cyan-800 transform transition duration-300 hover:scale-105"
             onClick={() => navigate(`/quiz/${content?.slug}?level=${currentLevel?.name}`)}
           >
             Start quiz

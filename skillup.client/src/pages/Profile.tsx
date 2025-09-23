@@ -172,7 +172,7 @@ export default function Profile() {
         <div className="mt-6">
           <button
             onClick={handleSave}
-            className="px-6 py-2 bg-cyan-700 hover:bg-teal-700 text-white p-2 rounded-md transition transform hover:scale-105"
+            className="px-6 py-2 bg-cyan-700 hover:bg-cyan-800 text-white p-2 rounded-md transition transform hover:scale-105"
           >
             Save Changes
           </button>
@@ -188,19 +188,19 @@ export default function Profile() {
 
         <ul className="space-y-3">
           {courses?.map((c) => (
-            <li key={c.id} className="flex rounded overflow-hidden bg-gray-100">
-              <div className="flex-shrink-0">
+            <li key={c.id} className="flex flex-col md:flex-row text-center md:text-left rounded overflow-hidden bg-gray-100 items-stretch">
+              <div className="flex-shrink-0 mx-auto mt-3 md:mt-0 max-w-24 max-h-24 aspect-square items-center">
                 <img
                   src={`/${c.image}`}
                   alt={c.title}
-                  className="w-[96px] h-[96px] p-1 object-cover bg-white"
+                  className="p-1 object-cover bg-white w-full h-full"
                 />
               </div>
               <div className="flex-grow p-3">
                 <h3 className="font-semibold">{c.title}</h3>
 
-                <div className="mt-2 text-xs text-gray-600 flex items-center">
-                  <div className="flex space-x-3">
+                <div className="mt-2 text-sm text-gray-600 flex md:items-center flex-col md:flex-row">
+                  <div className="flex space-x-3 flex-col md:flex-row">
                     <span>Level: {c.currentLevel}</span>
                     <span>
                       Started:{" "}
@@ -208,12 +208,15 @@ export default function Profile() {
                     </span>
                   </div>
 
-                  {c.currentLevel === "Expert" && c.status === "Completed" && (
-                    <CertificateButton
-                      courseSlug={c.courseSlug}
-                      label="View Certificate"
-                    />
-                  )}
+                  <div className="mt-3 md:mt-[-4px] mx-6">
+                    {c.currentLevel === "Expert" && c.status === "Completed" && (
+                      <CertificateButton
+                        courseSlug={c.courseSlug}
+                        label="View Certificate"
+                      />
+                    )}
+                  </div>
+
                 </div>
               </div>
             </li>

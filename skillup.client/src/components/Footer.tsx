@@ -12,7 +12,7 @@ export function Footer() {
           />
         </div>
 
-        <div className="text-sm text-gray-400">
+        <div className="text-sm text-center text-gray-400">
           &copy; {new Date().getFullYear()} SKILLUP. All rights reserved.
         </div>
 

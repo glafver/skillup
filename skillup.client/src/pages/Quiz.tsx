@@ -28,7 +28,7 @@ interface UserAnswer {
 }
 
 const Quiz: React.FC = () => {
-    const { slug } = useParams<{ slug: string }>();
+    const { slug } = useParams<{ slug: string; }>();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const level = searchParams.get("level");
@@ -215,7 +215,7 @@ const Quiz: React.FC = () => {
                         exit={{ opacity: 0 }}
                     >
                         <motion.div
-                            className="bg-white rounded-xl p-8 max-w-md text-center shadow-lg"
+                            className="bg-white rounded-lg p-8 max-w-md text-center shadow-lg"
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.3 }}
@@ -223,7 +223,7 @@ const Quiz: React.FC = () => {
                             <h2 className="text-2xl font-bold mb-4">🎉 Quiz Completed!</h2>
                             <p className="mb-6">You have finished the quiz. Let's go to your results!</p>
                             <Link to={`/quiz/${slug}/results?level=${level}`}>
-                                <button className="bg-cyan-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-cyan-800 transition transform hover:scale-105">
+                                <button className="bg-cyan-700 text-white px-6 py-2 rounded-md hover:bg-cyan-800 transition transform hover:scale-105">
                                     Go to Results
                                 </button>
                             </Link>

@@ -25,7 +25,7 @@ const AboutSection: React.FC = () => {
                         Our mission is to make coding simple, engaging, and accessible for everyone.
                     </p>
                     <Link to="/about">
-                        <button className="bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-3 px-6 rounded-md transition transform hover:scale-105 cursor-pointer">
+                        <button className="bg-cyan-700 hover:bg-cyan-800 text-white py-2 px-6 rounded-md transition transform hover:scale-105 cursor-pointer">
                             Read More
                         </button>
                     </Link>
