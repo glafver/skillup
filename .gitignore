@@ -44,3 +44,14 @@ Thumbs.db
 
 # Optional: Rider / JetBrains
 *.sln.iml
+
+# =====================
+# .NET 8 testprojekt
+# =====================
+/skillup.tests/bin/
+/skillup.tests/obj/
+/skillup.tests/*.user
+/skillup.tests/*.suo
+/skillup.tests/*.csproj.user
+/skillup.tests/.vs/
+
