@@ -67,6 +67,8 @@ jobs:
           env_vars: |
             MongoDBSettings__ConnectionString=${{ secrets.MONGO_CONNECTION_STRING }}
             Jwt__Key=${{ secrets.JWT_KEY }}
+            Admin__Email=${{ secrets.ADMIN_EMAIL }}
+            Admin__Password=${{ secrets.ADMIN_PASSWORD }}
 
       - name: Show URL
         run: echo "Deployed to ${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

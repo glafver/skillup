@@ -62,4 +62,30 @@ export const authService = {
   isLoggedIn(): boolean {
     return !!localStorage.getItem("token");
   },
+
+  /** Reads the role out of the JWT payload. */
+  getRole(): string {
+    const token = this.getToken();
+    if (!token) return "User";
+
+    try {
+      const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+      const json = new TextDecoder().decode(
+        Uint8Array.from(atob(padded), (c) => c.charCodeAt(0))
+      );
+      const payload = JSON.parse(json);
+      return (
+        payload.role ??
+        payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ??
+        "User"
+      );
+    } catch {
+      return "User";
+    }
+  },
+
+  isAdmin(): boolean {
+    return this.isLoggedIn() && this.getRole() === "Admin";
+  },
 };

@@ -9,5 +9,6 @@ namespace skillup.server.Services
         Task<Quiz> AddQuizAsync(Quiz quiz);
         Task UpdateQuizAsync(Quiz quiz);
         Task DeleteQuizAsync(string id);
+        Task DeleteBySlugAsync(string slug);
     }
 }

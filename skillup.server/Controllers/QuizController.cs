@@ -20,12 +20,4 @@ public class QuizController : ControllerBase
         var quizzes = await _quizService.GetQuizzesBySlugAndLevelAsync(slug, level);
         return Ok(quizzes);
     }
-
-    // POST api/quiz
-    [HttpPost]
-    public async Task<ActionResult<Quiz>> CreateQuiz([FromBody] Quiz quiz)
-    {
-        var createdQuiz = await _quizService.AddQuizAsync(quiz);
-        return CreatedAtAction(nameof(GetQuizzesBySlug), new { slug = createdQuiz.Slug, level = createdQuiz.Level }, createdQuiz);
-    }
 }

@@ -37,6 +37,7 @@ namespace skillup.server.Services
             };
             
             user.PasswordHash = _passwordHasher.HashPassword(user, password);
+            user.Role = "User";
             await _userService.CreateAsync(user);
             return user;
         }
@@ -78,6 +79,7 @@ namespace skillup.server.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, string.IsNullOrWhiteSpace(user.Role) ? "User" : user.Role),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

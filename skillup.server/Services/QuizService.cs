@@ -52,5 +52,18 @@ namespace skillup.server.Services
                 await _context.SaveChangesAsync();
             }
         }
+
+        // Delete every quiz belonging to a course
+        public async Task DeleteBySlugAsync(string slug)
+        {
+            var quizzes = await _context.Set<Quiz>()
+                                        .Where(q => q.Slug == slug)
+                                        .ToListAsync();
+
+            if (quizzes.Count == 0) return;
+
+            _context.Set<Quiz>().RemoveRange(quizzes);
+            await _context.SaveChangesAsync();
+        }
     }
 }

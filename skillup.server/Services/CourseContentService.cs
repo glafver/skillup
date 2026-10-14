@@ -20,5 +20,25 @@ namespace skillup.server.Services
 
         public async Task<CourseContent?> GetBySlugAsync(string slug) =>
             await _content.Find(c => c.Slug == slug).FirstOrDefaultAsync();
+
+        public async Task UpsertAsync(CourseContent content)
+        {
+            var existing = await GetBySlugAsync(content.Slug);
+            if (existing == null)
+            {
+                content.Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+                await _content.InsertOneAsync(content);
+                return;
+            }
+
+            content.Id = existing.Id;
+            await _content.ReplaceOneAsync(c => c.Slug == content.Slug, content);
+        }
+
+        public async Task<bool> DeleteBySlugAsync(string slug)
+        {
+            var result = await _content.DeleteOneAsync(c => c.Slug == slug);
+            return result.DeletedCount > 0;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using skillup.server.Converters;
 using skillup.server.Models;
 using skillup.server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,12 +12,16 @@ namespace skillup.server
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new ObjectIdJsonConverter());
+                });
 
             // Enable CORS
             builder.Services.AddCors(options =>
@@ -102,6 +107,39 @@ namespace skillup.server
             app.UseSwaggerUI();
             }
 
+            // Make sure the administrator account exists. Configured with the
+            // Admin__Email and Admin__Password environment variables.
+            var adminEmail = builder.Configuration["Admin:Email"];
+            var adminPassword = builder.Configuration["Admin:Password"];
+            if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPassword))
+            {
+                using var scope = app.Services.CreateScope();
+                var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+                var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
+
+                var admin = await userService.GetByEmailAsync(adminEmail);
+                if (admin == null)
+                {
+                    admin = new User
+                    {
+                        Firstname = "SkillUp",
+                        Lastname = "Admin",
+                        Email = adminEmail,
+                        Avatar = "avatar1.png"
+                    };
+                    admin.PasswordHash = passwordHasher.HashPassword(admin, adminPassword);
+                    admin.Role = "Admin";
+                    await userService.CreateAsync(admin);
+                    app.Logger.LogInformation("Admin account {Email} created", adminEmail);
+                }
+                else if (admin.Role != "Admin")
+                {
+                    admin.Role = "Admin";
+                    await userService.UpdateAsync(admin);
+                    app.Logger.LogInformation("Account {Email} promoted to Admin", adminEmail);
+                }
+            }
+
             //app.UseHttpsRedirection();
 
             // Testar till Mogno Atlas
@@ -124,7 +162,7 @@ namespace skillup.server
             app.UseAuthorization();
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

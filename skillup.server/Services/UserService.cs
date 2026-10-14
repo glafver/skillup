@@ -69,6 +69,11 @@ namespace skillup.server.Services
                 existingUser.Avatar = user.Avatar;
             }
 
+            if (!string.IsNullOrEmpty(user.Role))
+            {
+                existingUser.Role = user.Role;
+            }
+
             _context.Users.Update(existingUser);
             await _context.SaveChangesAsync();
             return true;

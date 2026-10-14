@@ -128,6 +128,8 @@ One-time setup — add these under Settings → Secrets and variables → Action
 | Secret | `GCP_SA_KEY`              | JSON key of the `github-actions` service account  |
 | Secret | `MONGO_CONNECTION_STRING` | MongoDB Atlas connection string                   |
 | Secret | `JWT_KEY`                 | a random string of at least 32 characters         |
+| Secret | `ADMIN_EMAIL`             | email of the administrator account                |
+| Secret | `ADMIN_PASSWORD`          | password for the administrator account            |
 
 Project ID, project number, region and service name are configured at the top of the
 workflow file. The project number is used to build the public Cloud Run URL, which is
@@ -149,3 +151,40 @@ the workflow from GitHub Secrets.
 | `Jwt__Issuer`, `Jwt__Audience`      | token issuer/audience (defaults in appsettings)  |
 
 Rotate the MongoDB password and the JWT key if they were ever exposed.
+
+## Roles and the admin area
+
+Every account has a role, either `User` or `Admin`.
+
+- A **User** can browse the courses, start one, follow its levels, take the quiz of a
+  level and collect certificates.
+- An **Admin** can additionally open **/admin** and manage courses, learning content
+  and quizzes.
+
+### Creating the administrator
+
+The API creates (or promotes) the administrator on startup from two settings:
+
+| Variable          | Description                                       |
+| ----------------- | ------------------------------------------------- |
+| `Admin__Email`    | email of the administrator account                |
+| `Admin__Password` | password, only used when the account is created   |
+
+If the email is already registered, that account is promoted to `Admin` and its
+password is left untouched. When running with `docker compose` both values are set in
+`docker-compose.yml`; on Cloud Run they come from the `ADMIN_EMAIL` and
+`ADMIN_PASSWORD` GitHub secrets.
+
+### Adding content
+
+1. Log in as the administrator and open **/admin**.
+2. **Courses → Load starter courses** fills the database with four example courses
+   (HTML, JavaScript, Python, C#) that use the illustrations already shipped in
+   `skillup.client/public/examples`. It is safe to run repeatedly: existing courses
+   are skipped.
+3. **Content** — pick a course and edit its levels and the topics of each level
+   (title, text and illustration).
+4. **Quizzes** — pick a course and a level, then add questions with options and mark
+   the correct answer.
+
+Regular users never see the admin link, and the admin API rejects them with 403.

@@ -15,6 +15,7 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import TestActiveCourses from "./pages/TestActiveCourses";
 import TestCertificate from "./pages/TestCertificate";
+import Admin from "./pages/Admin";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/about" element={<About />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={< FAQ />} />
           <Route path="/course/:slug" element={<CourseContentPage />} />

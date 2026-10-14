@@ -16,5 +16,8 @@ namespace skillup.server.Models
         [Required(ErrorMessage = "Password is required")]
         public string PasswordHash { get; set; } = string.Empty;
         public string? Avatar { get; set; }
+
+        // "User" or "Admin"
+        public string Role { get; set; } = "User";
     }
 }

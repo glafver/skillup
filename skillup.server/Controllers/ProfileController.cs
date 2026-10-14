@@ -45,7 +45,8 @@ namespace skillup.server.Controllers
                 user.Firstname,
                 user.Lastname,
                 user.Email,
-                user.Avatar
+                user.Avatar,
+                Role = string.IsNullOrWhiteSpace(user.Role) ? "User" : user.Role
             });
         }
 

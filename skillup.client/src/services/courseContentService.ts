@@ -11,6 +11,7 @@ export type CourseLevel = {
   name: string;
   theoryText?: string;
   topics?: CourseTopic[];
+  isLocked?: boolean;
 }
 
 export type CourseContent = {

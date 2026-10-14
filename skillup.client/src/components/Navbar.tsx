@@ -7,15 +7,18 @@ export function Navbar() {
     const location = useLocation();
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(authService.isLoggedIn());
+    const [isAdmin, setIsAdmin] = useState(authService.isAdmin());
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         setLoggedIn(authService.isLoggedIn());
+        setIsAdmin(authService.isAdmin());
     }, [location]);
 
     const handleLogout = () => {
         authService.logout();
         setLoggedIn(false);
+        setIsAdmin(false);
         navigate("/");
         setMenuOpen(false);
     };
@@ -53,6 +56,13 @@ export function Navbar() {
                                     Profile
                                 </Link>
                             </li>
+                            {isAdmin && (
+                                <li>
+                                    <Link to="/admin" className={getLinkClasses("/admin")}>
+                                        Admin
+                                    </Link>
+                                </li>
+                            )}
                             <li>
                                 <button
                                     onClick={handleLogout}
@@ -111,6 +121,17 @@ export function Navbar() {
                                         Profile
                                     </Link>
                                 </li>
+                                {isAdmin && (
+                                    <li>
+                                        <Link
+                                            to="/admin"
+                                            className={getLinkClasses("/admin")}
+                                            onClick={() => setMenuOpen(false)}
+                                        >
+                                            Admin
+                                        </Link>
+                                    </li>
+                                )}
                                 <li>
                                     <button
                                         onClick={handleLogout}
