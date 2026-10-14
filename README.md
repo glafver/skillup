@@ -166,6 +166,51 @@ the workflow from GitHub Secrets.
 
 Rotate the MongoDB password and the JWT key if they were ever exposed.
 
+## Keeping the Atlas free cluster awake
+
+Atlas automatically **pauses free (M0) clusters after 30 days without a single
+connection**, and refuses connections while the cluster is paused. Three ways to deal
+with it:
+
+### Scheduled ping (works out of the box)
+
+`GET /api/health` runs a real command against MongoDB, so a request to it counts as
+activity. The repository ships a scheduled workflow
+([`.github/workflows/keepalive.yml`](.github/workflows/keepalive.yml)) that pings it
+every Monday, and it can also be started by hand from the Actions tab. If the answer
+is not `200` the run fails — a handy warning that the cluster is already paused.
+
+### Cloud Scheduler (more robust)
+
+GitHub disables scheduled workflows after 60 days without repository activity, while
+Atlas only pauses after 30 days without connections, so the workflow above is safe
+but not bullet-proof. A Cloud Scheduler job is independent of the repository:
+
+```bash
+# Cloud Scheduler needs an App Engine app in the project. If the command below
+# complains about a missing App Engine application, create one first:
+#   gcloud app create --project=glafira-se --region=europe-west1
+
+gcloud scheduler jobs create http skillup-keepalive \
+  --project=glafira-se \
+  --location=europe-west1 \
+  --schedule="0 6 * * *" \
+  --uri="https://skillup-364590748641.europe-west1.run.app/api/health" \
+  --http-method=GET
+```
+
+Three Cloud Scheduler jobs per month are free.
+
+### Or leave the free tier
+
+Paid tiers (M2 and up, roughly $9/month) are never paused automatically.
+
+### If the cluster is already paused
+
+Open Atlas → **Database** → **Resume**. The data is kept, resuming takes a minute or
+two, and while the cluster is paused every database call fails: the API answers 500
+and `/api/health` answers 503.
+
 ## Roles and the admin area
 
 Every account has a role, either `User` or `Admin`.

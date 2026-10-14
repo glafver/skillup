@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using skillup.server.Models;
 
@@ -39,6 +40,23 @@ namespace skillup.server.Services
         {
             var result = await _content.DeleteOneAsync(c => c.Slug == slug);
             return result.DeletedCount > 0;
+        }
+
+        /// <summary>
+        /// Runs a trivial command against the database. Used by the health endpoint and
+        /// by the scheduled keep-alive that stops a free Atlas cluster from pausing.
+        /// </summary>
+        public async Task<bool> PingAsync()
+        {
+            try
+            {
+                await _content.Database.RunCommandAsync<BsonDocument>(new BsonDocument("ping", 1));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
