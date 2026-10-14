@@ -21,6 +21,33 @@ cd /app/server
 ASPNETCORE_URLS="http://127.0.0.1:${INTERNAL_PORT}" dotnet skillup.server.dll &
 api_pid=$!
 
+# Wait for the API to accept connections before starting nginx. Cloud Run decides a
+# revision is ready when something listens on $PORT, so this makes sure traffic only
+# arrives once the backend is up - otherwise the first request after a cold start
+# gets a 502 from nginx.
+echo "Waiting for the API on port ${INTERNAL_PORT}..."
+api_ready=0
+for _ in $(seq 1 120); do
+  if ! kill -0 "$api_pid" 2>/dev/null; then
+    echo "The API process exited during startup." >&2
+    exit 1
+  fi
+
+  if (echo > "/dev/tcp/127.0.0.1/${INTERNAL_PORT}") 2>/dev/null; then
+    api_ready=1
+    break
+  fi
+
+  sleep 0.5
+done
+
+if [ "$api_ready" != "1" ]; then
+  echo "The API did not start listening on port ${INTERNAL_PORT}." >&2
+  exit 1
+fi
+
+echo "API is up."
+
 # Start nginx in the foreground on the public port.
 nginx -g 'daemon off;' &
 nginx_pid=$!
