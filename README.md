@@ -85,6 +85,16 @@ docker compose up --build
 The app is then available at <http://localhost:8090>. Change the host port with the
 `APP_PORT` environment variable.
 
+On startup the stack creates two accounts (see
+[Roles and the admin area](#roles-and-the-admin-area)):
+
+| Role  | Email                 | Password                   |
+| ----- | --------------------- | -------------------------- |
+| Admin | `admin@skillup.local` | `local-admin-password-123` |
+| User  | `demo@skillup.local`  | `demo-password-123`        |
+
+The login page fills in the demo account automatically.
+
 Useful commands:
 
 ```bash
@@ -130,6 +140,8 @@ One-time setup — add these under Settings → Secrets and variables → Action
 | Secret | `JWT_KEY`                 | a random string of at least 32 characters         |
 | Secret | `ADMIN_EMAIL`             | email of the administrator account                |
 | Secret | `ADMIN_PASSWORD`          | password for the administrator account            |
+| Secret | `DEMO_EMAIL`              | email of the shared demo account (optional)       |
+| Secret | `DEMO_PASSWORD`           | password for the shared demo account (optional)   |
 
 Project ID, project number, region and service name are configured at the top of the
 workflow file. The project number is used to build the public Cloud Run URL, which is
@@ -149,6 +161,8 @@ the workflow from GitHub Secrets.
 | `MongoDBSettings__DatabaseName`     | database name (default `SkillupDB`)              |
 | `Jwt__Key`                          | JWT signing key, at least 32 characters          |
 | `Jwt__Issuer`, `Jwt__Audience`      | token issuer/audience (defaults in appsettings)  |
+| `Admin__Email`, `Admin__Password`   | administrator account, created on startup        |
+| `Demo__Email`, `Demo__Password`     | shared demo account, created on startup          |
 
 Rotate the MongoDB password and the JWT key if they were ever exposed.
 
@@ -174,6 +188,26 @@ If the email is already registered, that account is promoted to `Admin` and its
 password is left untouched. When running with `docker compose` both values are set in
 `docker-compose.yml`; on Cloud Run they come from the `ADMIN_EMAIL` and
 `ADMIN_PASSWORD` GitHub secrets.
+
+### Shared demo account
+
+So that anybody can look around without registering, the API can also create a demo
+account with the `User` role:
+
+| Variable          | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| `Demo__Email`     | email of the demo account                       |
+| `Demo__Password`  | password, only used when the account is created |
+
+The login page asks `GET /api/auth/demo` for those credentials and **fills the form
+in automatically**, so a visitor only has to press *Login*. When no demo account is
+configured the endpoint returns 404 and the form stays empty.
+
+> The demo credentials are public by design. Never store anything private, and delete
+> content you do not want strangers to change — a signed-in demo user can start
+> courses and take quizzes like anybody else.
+
+Local defaults: `demo@skillup.local` / `demo-password-123` (see `docker-compose.yml`).
 
 ### Adding content
 

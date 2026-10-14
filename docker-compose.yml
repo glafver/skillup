@@ -30,6 +30,9 @@ services:
       # The administrator account is created on startup from these values.
       Admin__Email: admin@skillup.local
       Admin__Password: local-admin-password-123
+      # Shared account for visitors. Its credentials are public by design.
+      Demo__Email: demo@skillup.local
+      Demo__Password: demo-password-123
       PORT: "8080"
       SERVER_PORT: "5000"
     ports:

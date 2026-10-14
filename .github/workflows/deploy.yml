@@ -69,6 +69,8 @@ jobs:
             Jwt__Key=${{ secrets.JWT_KEY }}
             Admin__Email=${{ secrets.ADMIN_EMAIL }}
             Admin__Password=${{ secrets.ADMIN_PASSWORD }}
+            Demo__Email=${{ secrets.DEMO_EMAIL }}
+            Demo__Password=${{ secrets.DEMO_PASSWORD }}
 
       - name: Show URL
         run: echo "Deployed to ${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"

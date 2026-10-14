@@ -15,6 +15,11 @@ export interface RegisterRequest {
   avatar: string;
 }
 
+export interface DemoAccount {
+  email: string;
+  password: string;
+}
+
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5178";
 const API_URL = `${BASE_URL}/api/auth`;
 
@@ -44,6 +49,21 @@ export const authService = {
 
     if (!res.ok) {
       throw new Error("Register failed");
+    }
+  },
+
+  /** Credentials of the shared demo account, or null when none is configured. */
+  async getDemoAccount(): Promise<DemoAccount | null> {
+    try {
+      const res = await fetch(`${API_URL}/demo`);
+      if (!res.ok) return null;
+
+      const data = await res.json();
+      if (!data?.email || !data?.password) return null;
+
+      return { email: data.email, password: data.password };
+    } catch {
+      return null;
     }
   },
 

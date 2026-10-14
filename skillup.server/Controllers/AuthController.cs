@@ -9,10 +9,29 @@ namespace skillup.server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IConfiguration configuration)
         {
             _authService = authService;
+            _configuration = configuration;
+        }
+
+        /// <summary>
+        /// Credentials of the shared demonstration account, so a visitor can look
+        /// around without registering. Returns 404 when no demo account is configured.
+        /// This account is public by design - never store anything private in it.
+        /// </summary>
+        [HttpGet("demo")]
+        public IActionResult GetDemoAccount()
+        {
+            var email = _configuration["Demo:Email"];
+            var password = _configuration["Demo:Password"];
+
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+                return NotFound();
+
+            return Ok(new { email, password });
         }
 
         [HttpPost("register")]

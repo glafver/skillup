@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authService } from "../services/authService";
 import type { LoginRequest } from "../services/authService";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +6,26 @@ import { useNavigate } from "react-router-dom";
 export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [demoAccount, setDemoAccount] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+
+  // Fill in the shared demo account so a visitor can just press "Login".
+  useEffect(() => {
+    let active = true;
+
+    authService.getDemoAccount().then((account) => {
+      if (!active || !account) return;
+      setEmail((current) => current || account.email);
+      setPassword((current) => current || account.password);
+      setDemoAccount(true);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +55,13 @@ export const LoginForm = ({ successMessage }: { successMessage?: string; }) => {
       )}
       {error && <p className="text-red-500 mb-2">{error}</p>}
       {success && <p className="text-green-500 mb-2">Login successful!</p>}
+
+      {demoAccount && (
+        <p className="text-xs text-gray-600 bg-white border border-gray-300 rounded px-3 py-2">
+          Demo account is filled in for you — just press <strong>Login</strong> to look
+          around. Feel free to register your own account instead.
+        </p>
+      )}
 
       <div>
         <label className="block text-sm font-medium mb-1">Email</label>

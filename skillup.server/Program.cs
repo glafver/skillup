@@ -107,38 +107,38 @@ namespace skillup.server
             app.UseSwaggerUI();
             }
 
-            // Make sure the administrator account exists. Configured with the
-            // Admin__Email and Admin__Password environment variables.
-            var adminEmail = builder.Configuration["Admin:Email"];
-            var adminPassword = builder.Configuration["Admin:Password"];
-            if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPassword))
+            // Account bootstrapping. Configured with the Admin__Email/Admin__Password and
+            // Demo__Email/Demo__Password environment variables.
+            async Task EnsureAccountAsync(string? email, string? password, string role, string firstname, string lastname)
             {
+                if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return;
+
                 try
                 {
                     using var scope = app.Services.CreateScope();
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                     var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
 
-                    var admin = await userService.GetByEmailAsync(adminEmail);
-                    if (admin == null)
+                    var existing = await userService.GetByEmailAsync(email);
+                    if (existing == null)
                     {
-                        admin = new User
+                        var created = new User
                         {
-                            Firstname = "SkillUp",
-                            Lastname = "Admin",
-                            Email = adminEmail,
-                            Avatar = "avatar1.png"
+                            Firstname = firstname,
+                            Lastname = lastname,
+                            Email = email,
+                            Avatar = "avatar1.png",
+                            Role = role
                         };
-                        admin.PasswordHash = passwordHasher.HashPassword(admin, adminPassword);
-                        admin.Role = "Admin";
-                        await userService.CreateAsync(admin);
-                        app.Logger.LogInformation("Admin account {Email} created", adminEmail);
+                        created.PasswordHash = passwordHasher.HashPassword(created, password);
+                        await userService.CreateAsync(created);
+                        app.Logger.LogInformation("{Role} account {Email} created", role, email);
                     }
-                    else if (admin.Role != "Admin")
+                    else if (role == "Admin" && existing.Role != "Admin")
                     {
-                        admin.Role = "Admin";
-                        await userService.UpdateAsync(admin);
-                        app.Logger.LogInformation("Account {Email} promoted to Admin", adminEmail);
+                        existing.Role = "Admin";
+                        await userService.UpdateAsync(existing);
+                        app.Logger.LogInformation("Account {Email} promoted to Admin", email);
                     }
                 }
                 catch (Exception ex)
@@ -146,10 +146,18 @@ namespace skillup.server
                     // Do not stop the application: the database can also be configured
                     // through a new revision. The account is created on the next start.
                     app.Logger.LogError(ex,
-                        "Could not create the administrator account {Email}. " +
-                        "Check MongoDBSettings__ConnectionString.", adminEmail);
+                        "Could not create the {Role} account {Email}. " +
+                        "Check MongoDBSettings__ConnectionString.", role, email);
                 }
             }
+
+            await EnsureAccountAsync(
+                builder.Configuration["Admin:Email"], builder.Configuration["Admin:Password"],
+                "Admin", "SkillUp", "Admin");
+
+            await EnsureAccountAsync(
+                builder.Configuration["Demo:Email"], builder.Configuration["Demo:Password"],
+                "User", "Demo", "User");
 
             //app.UseHttpsRedirection();
 
