@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+.gitattributes
+**/node_modules
+**/dist
+**/dist-ssr
+**/bin
+**/obj
+skillup.tests
+docker-compose.yml
+deploy
+**/*.md
+**/.DS_Store
+**/.vs
+**/.vscode
