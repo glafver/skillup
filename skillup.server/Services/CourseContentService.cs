@@ -45,12 +45,22 @@ namespace skillup.server.Services
         /// <summary>
         /// Runs a trivial command against the database. Used by the health endpoint and
         /// by the scheduled keep-alive that stops a free Atlas cluster from pausing.
+        /// Bounded in time so a paused or unreachable cluster cannot hang the request.
         /// </summary>
-        public async Task<bool> PingAsync()
+        public async Task<bool> PingAsync(TimeSpan? timeout = null)
         {
+            var deadline = timeout ?? TimeSpan.FromSeconds(5);
+
             try
             {
-                await _content.Database.RunCommandAsync<BsonDocument>(new BsonDocument("ping", 1));
+                var ping = _content.Database.RunCommandAsync<BsonDocument>(new BsonDocument("ping", 1));
+
+                if (await Task.WhenAny(ping, Task.Delay(deadline)) != ping)
+                {
+                    return false;
+                }
+
+                await ping;
                 return true;
             }
             catch

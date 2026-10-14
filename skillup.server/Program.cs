@@ -109,6 +109,8 @@ namespace skillup.server
 
             // Account bootstrapping. Configured with the Admin__Email/Admin__Password and
             // Demo__Email/Demo__Password environment variables.
+            const string DefaultAvatar = "/avatars/avatar-1.png";
+
             async Task EnsureAccountAsync(string? email, string? password, string role, string firstname, string lastname)
             {
                 if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return;
@@ -127,18 +129,36 @@ namespace skillup.server
                             Firstname = firstname,
                             Lastname = lastname,
                             Email = email,
-                            Avatar = "avatar1.png",
+                            Avatar = DefaultAvatar,
                             Role = role
                         };
                         created.PasswordHash = passwordHasher.HashPassword(created, password);
                         await userService.CreateAsync(created);
                         app.Logger.LogInformation("{Role} account {Email} created", role, email);
+                        return;
                     }
-                    else if (role == "Admin" && existing.Role != "Admin")
+
+                    var changed = false;
+
+                    if (role == "Admin" && existing.Role != "Admin")
                     {
                         existing.Role = "Admin";
+                        changed = true;
+                    }
+
+                    // Repair avatars that are not a usable path (for example the early
+                    // "avatar1.png" placeholder).
+                    if (string.IsNullOrWhiteSpace(existing.Avatar)
+                        || !(existing.Avatar.StartsWith("/") || existing.Avatar.StartsWith("http")))
+                    {
+                        existing.Avatar = DefaultAvatar;
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
                         await userService.UpdateAsync(existing);
-                        app.Logger.LogInformation("Account {Email} promoted to Admin", email);
+                        app.Logger.LogInformation("Account {Email} updated during bootstrap", email);
                     }
                 }
                 catch (Exception ex)
@@ -151,13 +171,21 @@ namespace skillup.server
                 }
             }
 
-            await EnsureAccountAsync(
-                builder.Configuration["Admin:Email"], builder.Configuration["Admin:Password"],
-                "Admin", "SkillUp", "Admin");
+            // Created after the server starts listening, so that a slow or unreachable
+            // database never stops the application from booting.
+            app.Lifetime.ApplicationStarted.Register(() =>
+            {
+                _ = Task.Run(async () =>
+                {
+                    await EnsureAccountAsync(
+                        builder.Configuration["Admin:Email"], builder.Configuration["Admin:Password"],
+                        "Admin", "SkillUp", "Admin");
 
-            await EnsureAccountAsync(
-                builder.Configuration["Demo:Email"], builder.Configuration["Demo:Password"],
-                "User", "Demo", "User");
+                    await EnsureAccountAsync(
+                        builder.Configuration["Demo:Email"], builder.Configuration["Demo:Password"],
+                        "User", "Demo", "User");
+                });
+            });
 
             //app.UseHttpsRedirection();
 
