@@ -8,6 +8,9 @@ on:
 env:
   # Change these if you rename the GCP project / region / service.
   PROJECT_ID: glafira-se
+  # Project number, used to build the public Cloud Run URL. To look it up:
+  #   gcloud projects describe glafira-se --format='value(projectNumber)'
+  PROJECT_NUMBER: "364590748641"
   REGION: europe-west1
   SERVICE: skillup
 
@@ -42,14 +45,11 @@ jobs:
                  --location="$REGION" \
                  --description="SkillUp images"
 
-      - name: Resolve public URL
-        run: |
-          PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectNumber)')
-          echo "SITE_URL=https://$SERVICE-$PROJECT_NUMBER.$REGION.run.app" >> "$GITHUB_ENV"
-
       - name: Build and push image
         run: |
+          SITE_URL="https://$SERVICE-$PROJECT_NUMBER.$REGION.run.app"
           IMAGE=${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ github.sha }}
+          echo "Building client for $SITE_URL"
           docker build --build-arg VITE_API_URL="$SITE_URL" -t "$IMAGE" .
           docker push "$IMAGE"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"

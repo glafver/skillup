@@ -129,9 +129,11 @@ One-time setup — add these under Settings → Secrets and variables → Action
 | Secret | `MONGO_CONNECTION_STRING` | MongoDB Atlas connection string                   |
 | Secret | `JWT_KEY`                 | a random string of at least 32 characters         |
 
-Project, region and service name are configured at the top of the workflow file. The
-Artifact Registry repository is created on the first run, which requires
-`roles/artifactregistry.admin` for the deploy service account.
+Project ID, project number, region and service name are configured at the top of the
+workflow file. The project number is used to build the public Cloud Run URL, which is
+baked into the client as `VITE_API_URL`. The Artifact Registry repository is created
+on the first run, which requires `roles/artifactregistry.admin` for the deploy
+service account.
 
 ### Secrets
 
