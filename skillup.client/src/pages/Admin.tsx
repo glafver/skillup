@@ -14,7 +14,7 @@ import {
   type CourseLevel,
   type CourseTopic,
 } from "../services/courseContentService";
-import { exampleImageGroups, exampleImagePath } from "../data/exampleImages";
+import { exampleImageGroups, exampleImagePath, courseImageOptions } from "../data/exampleImages";
 
 const LEVELS = ["Beginner", "Advanced", "Expert"];
 
@@ -163,10 +163,18 @@ function CoursesTab({ courses, reload, onNotice, onError }: TabProps & { reload:
     }
   };
 
-  const runSeed = async () => {
+  const runSeed = async (force: boolean) => {
+    if (
+      force &&
+      !window.confirm(
+        "Overwrite the starter courses and their quizzes with the sample data? Your changes to those items will be lost."
+      )
+    ) {
+      return;
+    }
     setBusy(true);
     try {
-      const result = await adminService.seed();
+      const result = await adminService.seed(force);
       onNotice(result.message);
       reload();
     } catch (e) {
@@ -182,8 +190,11 @@ function CoursesTab({ courses, reload, onNotice, onError }: TabProps & { reload:
         <button className={primaryClass} onClick={() => setDraft(emptyCourse())}>
           New course
         </button>
-        <button className={secondaryClass} onClick={runSeed} disabled={busy}>
+        <button className={secondaryClass} onClick={() => runSeed(false)} disabled={busy}>
           Load starter courses
+        </button>
+        <button className={secondaryClass} onClick={() => runSeed(true)} disabled={busy}>
+          Reset starter content
         </button>
       </div>
 
@@ -247,12 +258,19 @@ function CoursesTab({ courses, reload, onNotice, onError }: TabProps & { reload:
               />
             </label>
             <label className="text-sm">
-              Card image
+              Card image (file name from the public folder)
               <input
                 className={inputClass}
+                list="course-images"
+                placeholder="html.png"
                 value={draft.image}
                 onChange={(e) => setDraft({ ...draft, image: e.target.value })}
               />
+              <datalist id="course-images">
+                {courseImageOptions.map((file) => (
+                  <option key={file} value={file} />
+                ))}
+              </datalist>
             </label>
             <label className="text-sm">
               Category

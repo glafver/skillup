@@ -181,7 +181,9 @@ password is left untouched. When running with `docker compose` both values are s
 2. **Courses → Load starter courses** fills the database with four example courses
    (HTML, JavaScript, Python, C#) that use the illustrations already shipped in
    `skillup.client/public/examples`. It is safe to run repeatedly: existing courses
-   are skipped.
+   are skipped. **Reset starter content** does the same but overwrites the existing
+   starter courses, their levels, topics and quizzes — useful when the sample data
+   has been updated, and destructive for any edits you made to those items.
 3. **Content** — pick a course and edit its levels and the topics of each level
    (title, text and illustration).
 4. **Quizzes** — pick a course and a level, then add questions with options and mark

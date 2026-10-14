@@ -173,35 +173,76 @@ namespace skillup.server.Controllers
         // ---------- starter content ----------
 
         [HttpPost("seed")]
-        public async Task<IActionResult> Seed()
+        public async Task<IActionResult> Seed([FromQuery] bool force = false)
         {
             var existingCourses = await _courses.GetAllCourseAsync();
-            var existingSlugs = existingCourses
-                .Select(c => c.Slug)
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var bySlug = existingCourses
+                .GroupBy(c => c.Slug, StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
 
             var coursesCreated = 0;
+            var coursesUpdated = 0;
             foreach (var course in SampleData.Courses())
             {
-                if (existingSlugs.Contains(course.Slug)) continue;
+                if (bySlug.TryGetValue(course.Slug, out var current))
+                {
+                    if (!force) continue;
+
+                    current.Title = course.Title;
+                    current.Description = course.Description;
+                    current.Image = course.Image;
+                    current.Category = course.Category;
+                    current.LevelCount = course.LevelCount;
+                    await _courses.UpdateCourseAsync(current);
+                    coursesUpdated++;
+                    continue;
+                }
+
                 course.Id = ObjectId.GenerateNewId().ToString();
                 await _courses.AddCourseAsync(course);
                 coursesCreated++;
             }
 
             var contentsCreated = 0;
+            var contentsUpdated = 0;
             foreach (var content in SampleData.Contents())
             {
-                if (await _contents.GetBySlugAsync(content.Slug) != null) continue;
+                var existingContent = await _contents.GetBySlugAsync(content.Slug);
+                if (existingContent != null)
+                {
+                    if (!force) continue;
+                    await _contents.UpsertAsync(content);
+                    contentsUpdated++;
+                    continue;
+                }
+
                 await _contents.UpsertAsync(content);
                 contentsCreated++;
             }
 
             var quizzesCreated = 0;
+            var quizzesUpdated = 0;
             foreach (var quiz in SampleData.Quizzes())
             {
                 var already = await _quizzes.GetQuizzesBySlugAndLevelAsync(quiz.Slug, quiz.Level);
-                if (already.Count > 0) continue;
+                if (already.Count > 0)
+                {
+                    if (!force) continue;
+
+                    var target = already[0];
+                    target.Questions = quiz.Questions;
+                    await _quizzes.UpdateQuizAsync(target);
+
+                    // Remove accidental duplicates, keeping only the first one.
+                    for (var i = 1; i < already.Count; i++)
+                    {
+                        await _quizzes.DeleteQuizAsync(already[i].Id.ToString());
+                    }
+
+                    quizzesUpdated++;
+                    continue;
+                }
+
                 quiz.Id = ObjectId.GenerateNewId();
                 await _quizzes.AddQuizAsync(quiz);
                 quizzesCreated++;
@@ -209,10 +250,16 @@ namespace skillup.server.Controllers
 
             return Ok(new
             {
-                message = $"Created {coursesCreated} courses, {contentsCreated} course contents and {quizzesCreated} quizzes.",
+                message =
+                    $"Starter content: {coursesCreated} courses created / {coursesUpdated} updated, " +
+                    $"{contentsCreated} contents created / {contentsUpdated} updated, " +
+                    $"{quizzesCreated} quizzes created / {quizzesUpdated} updated.",
                 coursesCreated,
+                coursesUpdated,
                 contentsCreated,
-                quizzesCreated
+                contentsUpdated,
+                quizzesCreated,
+                quizzesUpdated
             });
         }
     }

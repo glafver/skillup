@@ -38,3 +38,20 @@ export const exampleImageGroups: { group: string; files: string[] }[] = [
 ];
 
 export const exampleImagePath = (file: string) => `/examples/${file}.png`;
+
+// Card images that ship in the client's public folder and are commonly used as a
+// course illustration. Shown as suggestions in the admin course form.
+export const courseImageOptions = [
+  "html.png",
+  "javascript.png",
+  "python.png",
+  "csharp.png",
+  "coding.png",
+  "about.png",
+  "about-skillup.png",
+  "contact.png",
+  "hero-image.png",
+  "success.png",
+  "timer.png",
+  "404.png",
+];

@@ -112,8 +112,9 @@ export const adminService = {
       parse<{ message: string }>
     ),
 
-  seed: () =>
-    fetch(`${BASE}/seed`, { method: "POST", headers: authHeaders() }).then(
-      parse<{ message: string }>
-    ),
+  seed: (force = false) =>
+    fetch(`${BASE}/seed${force ? "?force=true" : ""}`, {
+      method: "POST",
+      headers: authHeaders(),
+    }).then(parse<{ message: string }>),
 };
