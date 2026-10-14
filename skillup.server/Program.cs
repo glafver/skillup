@@ -113,30 +113,41 @@ namespace skillup.server
             var adminPassword = builder.Configuration["Admin:Password"];
             if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPassword))
             {
-                using var scope = app.Services.CreateScope();
-                var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-                var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
+                try
+                {
+                    using var scope = app.Services.CreateScope();
+                    var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+                    var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
 
-                var admin = await userService.GetByEmailAsync(adminEmail);
-                if (admin == null)
-                {
-                    admin = new User
+                    var admin = await userService.GetByEmailAsync(adminEmail);
+                    if (admin == null)
                     {
-                        Firstname = "SkillUp",
-                        Lastname = "Admin",
-                        Email = adminEmail,
-                        Avatar = "avatar1.png"
-                    };
-                    admin.PasswordHash = passwordHasher.HashPassword(admin, adminPassword);
-                    admin.Role = "Admin";
-                    await userService.CreateAsync(admin);
-                    app.Logger.LogInformation("Admin account {Email} created", adminEmail);
+                        admin = new User
+                        {
+                            Firstname = "SkillUp",
+                            Lastname = "Admin",
+                            Email = adminEmail,
+                            Avatar = "avatar1.png"
+                        };
+                        admin.PasswordHash = passwordHasher.HashPassword(admin, adminPassword);
+                        admin.Role = "Admin";
+                        await userService.CreateAsync(admin);
+                        app.Logger.LogInformation("Admin account {Email} created", adminEmail);
+                    }
+                    else if (admin.Role != "Admin")
+                    {
+                        admin.Role = "Admin";
+                        await userService.UpdateAsync(admin);
+                        app.Logger.LogInformation("Account {Email} promoted to Admin", adminEmail);
+                    }
                 }
-                else if (admin.Role != "Admin")
+                catch (Exception ex)
                 {
-                    admin.Role = "Admin";
-                    await userService.UpdateAsync(admin);
-                    app.Logger.LogInformation("Account {Email} promoted to Admin", adminEmail);
+                    // Do not stop the application: the database can also be configured
+                    // through a new revision. The account is created on the next start.
+                    app.Logger.LogError(ex,
+                        "Could not create the administrator account {Email}. " +
+                        "Check MongoDBSettings__ConnectionString.", adminEmail);
                 }
             }
 
