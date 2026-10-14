@@ -34,6 +34,13 @@ namespace skillup.server
                 .Get<MongoDBSettings>() 
                 ?? throw new InvalidOperationException("MongoDBSettings not found in configuration");
 
+            if (string.IsNullOrWhiteSpace(mongoDBSettings.ConnectionString))
+            {
+                throw new InvalidOperationException(
+                    "MongoDBSettings:ConnectionString is not configured. Set the " +
+                    "MongoDBSettings__ConnectionString environment variable (see skillup.server/example.env).");
+            }
+
             builder.Services.Configure<MongoDBSettings>(
                 builder.Configuration.GetSection("MongoDBSettings"));
 
@@ -49,8 +56,13 @@ namespace skillup.server
             builder.Services.AddScoped<ICertificateService, CertificateService>();
 
             //JWT
-            var key = builder.Configuration["Jwt:Key"]
-                    ?? throw new InvalidOperationException("Jwt:Key is missing in configuration");
+            var key = builder.Configuration["Jwt:Key"];
+            if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
+            {
+                throw new InvalidOperationException(
+                    "Jwt:Key is missing or shorter than 32 characters. Set the " +
+                    "Jwt__Key environment variable (see skillup.server/example.env).");
+            }
             var issuer = builder.Configuration["Jwt:Issuer"]
                     ?? throw new InvalidOperationException("Jwt:Issuer is missing in configuration");
             var audience = builder.Configuration["Jwt:Audience"]

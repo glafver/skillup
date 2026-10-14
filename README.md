@@ -42,7 +42,19 @@ Runs backend API at http://localhost:5178
 
 ### 3. Environment Variables
 
-Make a copy of the provided example.env in skillup.client folder and rename it to .env
+The frontend reads `VITE_API_URL`: copy `skillup.client/example.env` to
+`skillup.client/.env` and adjust it.
+
+The backend needs a MongoDB connection string and a JWT key, which are **not**
+committed. Copy `skillup.server/example.env` and export the variables, for example:
+
+```bash
+export MongoDBSettings__ConnectionString="mongodb+srv://user:password@cluster.mongodb.net/?retryWrites=true&w=majority"
+export Jwt__Key="a-random-string-of-at-least-32-characters"
+dotnet run --project skillup.server
+```
+
+The API refuses to start with a clear message if either value is missing.
 
 ### 4. Setup Frontend
 
@@ -121,10 +133,17 @@ Project, region and service name are configured at the top of the workflow file.
 Artifact Registry repository is created on the first run, which requires
 `roles/artifactregistry.admin` for the deploy service account.
 
-### Security note
+### Secrets
 
-`skillup.server/appsettings.json` contains a working MongoDB Atlas connection string
-and a JWT key, while the repository is public. Those credentials should be rotated,
-and the file reduced to placeholders with the real values supplied through
-environment variables (`MongoDBSettings__ConnectionString`, `Jwt__Key`) — which is
-what the workflow does.
+Secrets are never committed: `appsettings.json` only holds non-secret defaults, and
+the API refuses to start without the values below. In Cloud Run they are supplied by
+the workflow from GitHub Secrets.
+
+| Variable                            | Description                                      |
+| ----------------------------------- | ------------------------------------------------ |
+| `MongoDBSettings__ConnectionString` | MongoDB Atlas connection string                  |
+| `MongoDBSettings__DatabaseName`     | database name (default `SkillupDB`)              |
+| `Jwt__Key`                          | JWT signing key, at least 32 characters          |
+| `Jwt__Issuer`, `Jwt__Audience`      | token issuer/audience (defaults in appsettings)  |
+
+Rotate the MongoDB password and the JWT key if they were ever exposed.
