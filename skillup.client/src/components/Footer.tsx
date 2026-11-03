@@ -8,6 +8,8 @@ export function Footer() {
           <img
             src="/logo-gray-name.png"
             alt="SkillUp Logo"
+            width={3856}
+            height={800}
             className="h-8 mx-auto md:mx-0"
           />
         </div>

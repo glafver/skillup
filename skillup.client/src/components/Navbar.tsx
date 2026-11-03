@@ -34,6 +34,8 @@ export function Navbar() {
                     <img
                         src="/logo-cyan-name.png"
                         alt="SkillUp Logo"
+                        width={3856}
+                        height={800}
                         className="h-8 w-auto"
                     />
                 </Link>

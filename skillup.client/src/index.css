@@ -1,17 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
-/* Keep the layout width identical whether or not a vertical scrollbar is shown.
-   Without this, centred content jumps sideways when navigating between a long page
-   and a short one (the scrollbar is ~15 px wide on Windows). */
+/* Always reserve the vertical scrollbar so the layout width stays identical on short
+   and long pages — content never jumps sideways when navigating. Using
+   `overflow-y: scroll` instead of `scrollbar-gutter: stable` avoids the empty white
+   gutter that the latter leaves on pages that do not scroll. */
 html {
-    scrollbar-gutter: stable;
-}
-
-@supports not (scrollbar-gutter: stable) {
-    html {
-        overflow-y: scroll;
-    }
+    overflow-y: scroll;
 }
 
 @theme {

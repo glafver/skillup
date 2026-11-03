@@ -9,7 +9,9 @@ const HeroSection: React.FC = () => {
                     <img
                         src="/logo-cyan.png"
                         alt="Learning illustration"
-                        className="w-15 mx-auto mb-8"
+                        width={674}
+                        height={800}
+                        className="w-16 mx-auto mb-8"
                     />
                     <h1 className="text-4xl md:text-6xl font-bold mb-7">
                         Step by step - <br /> learning made easy!
@@ -24,11 +26,13 @@ const HeroSection: React.FC = () => {
                     </Link>
                 </div>
 
-                <div className="w-full md:w-1/2">
+                <div className="w-full md:w-1/2 flex justify-center">
                     <img
                         src="/hero-image.png"
                         alt="Learning illustration"
-                        className="w-150 p-16"
+                        width={596}
+                        height={670}
+                        className="w-full max-w-md"
                     />
                 </div>
             </div>
