@@ -58,6 +58,7 @@ namespace skillup.server
             builder.Services.AddScoped<ICourseService, CourseService>();
             builder.Services.AddSingleton<CourseContentService>();
             builder.Services.AddScoped<IQuizService, QuizService>();
+            builder.Services.AddScoped<StarterContentSeeder>();
             builder.Services.AddScoped<ICertificateService, CertificateService>();
 
             //JWT
@@ -171,6 +172,36 @@ namespace skillup.server
                 }
             }
 
+            // Loads the sample courses/content/quizzes on startup when the database has no
+            // courses yet, so a fresh deployment shows content without an admin having to
+            // log in and click "Load starter courses". Existing content is never touched.
+            async Task EnsureStarterContentAsync()
+            {
+                try
+                {
+                    using var scope = app.Services.CreateScope();
+                    var courses = scope.ServiceProvider.GetRequiredService<ICourseService>();
+                    var seeder = scope.ServiceProvider.GetRequiredService<StarterContentSeeder>();
+
+                    var existing = await courses.GetAllCourseAsync();
+                    if (existing.Count > 0)
+                    {
+                        app.Logger.LogInformation(
+                            "Starter content skipped: {Count} course(s) already present", existing.Count);
+                        return;
+                    }
+
+                    var result = await seeder.SeedAsync(force: false);
+                    app.Logger.LogInformation("Starter content seeded on startup: {Message}", result.Message);
+                }
+                catch (Exception ex)
+                {
+                    // Do not stop the application: content can still be loaded later from /admin.
+                    app.Logger.LogError(ex,
+                        "Could not seed starter content. Check MongoDBSettings__ConnectionString.");
+                }
+            }
+
             // Created after the server starts listening, so that a slow or unreachable
             // database never stops the application from booting.
             app.Lifetime.ApplicationStarted.Register(() =>
@@ -184,6 +215,8 @@ namespace skillup.server
                     await EnsureAccountAsync(
                         builder.Configuration["Demo:Email"], builder.Configuration["Demo:Password"],
                         "User", "Demo", "User");
+
+                    await EnsureStarterContentAsync();
                 });
             });
 
